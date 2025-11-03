@@ -1,0 +1,4378 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.gitignore
+app.config.js
+App.js
+app.json
+assets/adaptive-icon.png
+assets/favicon.png
+assets/icon.png
+assets/splash-icon.png
+babel.config.js
+eas.json
+index.js
+package.json
+screens/class/AddClassScreen.js
+screens/class/AddManagerToClassScreen.js
+screens/class/AddUserToClassScreen.js
+screens/class/AdminClassScreen.js
+screens/class/ClassScreen.js
+screens/class/ClassStatsScreen.js
+screens/class/ClassStudentsScreen.js
+screens/class/DeleteManagerFromClassScreen.js
+screens/class/DeleteUserFromClassScreen.js
+screens/class/EditClassScreen.js
+screens/file/AddFileScreen.js
+screens/file/EditFileScreen.js
+screens/file/ManageFilesScreen.js
+screens/lesson/AddLessonScreen.js
+screens/lesson/AdminLessonScreen.js
+screens/lesson/EditLessonScreen.js
+screens/lesson/lessonPageScreen.js
+screens/lesson/LessonScreen.js
+screens/lesson/LessonStatsScreen.js
+screens/task/AddTaskScreen.js
+screens/task/EditTaskScreen.js
+screens/task/ManageTasksScreen.js
+screens/user/LoginScreen.js
+screens/user/RegisterScreen.js
+utils/api.js
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".gitignore">
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
+</file>
+
+<file path="app.config.js">
+export default {
+  expo: {
+    name: "TaskMate",
+    slug: "taskmate",
+    version: "1.0.0",
+    android: { 
+      adaptiveIcon: {
+        foregroundImage: "./assets/adaptive-icon.png",
+        backgroundColor: "#FFFFFF"
+      },
+      package: "com.masore.privateLessons" 
+    },
+    ios: {
+      bundleIdentifier: "com.masore.privateLessons" ,
+      infoPlist: {
+        ITSAppUsesNonExemptEncryption: false 
+      }
+    },
+    extra: {
+      SERVER_URL: "https://private-lessones-2dbg.onrender.com",
+      eas: { 
+        projectId: "d873cc5d-8ab6-4b5c-b443-2bda40a32b82"
+      },
+    },
+  },
+};
+</file>
+
+<file path="App.js">
+// App.js
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StyleSheet } from 'react-native';
+
+// 🔑 מסכי התחברות ורישום
+import LoginScreen from './screens/user/LoginScreen';
+import RegisterScreen from './screens/user/RegisterScreen';
+
+// 📋 class
+import ClassScreen from './screens/class/ClassScreen';
+import AddClassScreen from './screens/class/AddClassScreen';
+import EditClassScreen from './screens/class/EditClassScreen';
+import AdminClassScreen from './screens/class/AdminClassScreen';
+import AddManagerToClassScreen from './screens/class/AddManagerToClassScreen';
+import DeleteManagerFromClassScreen from './screens/class/DeleteManagerFromClassScreen';
+import AddUserToClassScreen from './screens/class/AddUserToClassScreen';
+import DeleteUserFromClassScreen from './screens/class/DeleteUserFromClassScreen';
+import ClassStudentsScreen from './screens/class/ClassStudentsScreen';
+import ClassStatsScreen from './screens/class/ClassStatsScreen';
+//lessons
+import LessonScreen from './screens/lesson/LessonScreen';
+import AddLessonScreen from './screens/lesson/AddLessonScreen';
+import EditLessonScreen from './screens/lesson/EditLessonScreen';
+import LessonPageScreen from './screens/lesson/lessonPageScreen';
+import AdminLessonScreen from './screens/lesson/AdminLessonScreen';
+import LessonStatsScreen from './screens/lesson/LessonStatsScreen';
+// קבצים
+import ManageFilesScreen from './screens/file/ManageFilesScreen';
+import AddFileScreen from './screens/file/AddFileScreen';
+import EditFileScreen from './screens/file/EditFileScreen';
+// 📁 רשימות ומשימות
+import ManageTasksScreen from './screens/task/ManageTasksScreen';
+import AddTaskScreen from './screens/task/AddTaskScreen';
+import EditTaskScreen from './screens/task/EditTaskScreen';
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        {/* 🔐 התחברות ורישום */}
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ title: 'התחברות' }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ title: 'רישום' }}
+        />
+        {/* 🏫 כיתות */}
+        <Stack.Screen
+          name="Classes"
+          component={ClassScreen}
+          options={{ title: 'כיתות' }}
+        />
+        <Stack.Screen
+          name="AddClass"
+          component={AddClassScreen}
+          options={{ title: 'הוספת כיתה' }}
+        />
+        <Stack.Screen
+          name="EditClass"
+          component={EditClassScreen}
+          options={{ title: 'עריכת כיתה' }}
+        />
+        <Stack.Screen
+          name="AdminClass"
+          component={AdminClassScreen}
+          options={{ title: 'ניהול כיתה' }}
+        />
+        <Stack.Screen
+          name="AddManager"
+          component={AddManagerToClassScreen}
+          options={{ title: 'הוספת מנהל לכיתה' }}
+        />
+        <Stack.Screen
+          name="DeleteManager"
+          component={DeleteManagerFromClassScreen}
+          options={{ title: 'מחיקת מנהל מהכיתה' }}
+        />
+        <Stack.Screen
+          name="AddStudent"
+          component={AddUserToClassScreen}
+          options={{ title: 'הוספת תלמיד לכיתה' }}
+        />
+        <Stack.Screen
+          name="DeleteStudent"
+          component={DeleteUserFromClassScreen}
+          options={{ title: 'מחיקת תלמיד מהכיתה' }}
+        />
+        <Stack.Screen
+          name="ClassStudents"
+          component={ClassStudentsScreen}
+          options={{ title: 'תלמידי הכיתה' }}
+        />
+        <Stack.Screen
+          name="ClassStats"
+          component={ClassStatsScreen}
+          options={{ title: 'סטטיסטיקות כיתה' }}
+        />
+        {/* שיעור */}
+        <Stack.Screen
+          name="Lessons"
+          component={LessonScreen}
+          options={{ title: 'שיעורים' }}
+        />
+        <Stack.Screen
+          name="AddLesson"
+          component={AddLessonScreen}
+          options={{ title: 'הוספת שיעור' }}
+        />
+        <Stack.Screen
+          name="EditLesson"
+          component={EditLessonScreen}
+          options={{ title: 'עריכת שיעור' }}
+        />
+        <Stack.Screen
+          name="LessonPage"
+          component={LessonPageScreen}
+          options={{ title: 'פרטי שיעור' }}
+        />
+        <Stack.Screen
+          name="AdminLesson"
+          component={AdminLessonScreen}
+          options={{ title: 'ניהול שיעור' }}
+        />
+        <Stack.Screen
+          name="LessonStats"
+          component={LessonStatsScreen}
+          options={{ title: 'סטטיסטיקות שיעור' }}
+        />
+       {/* קבצים */}
+        <Stack.Screen
+            name="ManageFiles"
+            component={ManageFilesScreen}
+            options={{ title: 'ניהול קבצים' }}
+        />
+        <Stack.Screen
+            name="AddFile"
+            component={AddFileScreen}
+            options={{ title: 'הוספת קובץ' }}
+        />
+        <Stack.Screen
+            name="EditFile"
+            component={EditFileScreen}
+            options={{ title: 'עריכת קובץ' }}
+        />
+        {/* משימות */}
+        <Stack.Screen
+            name="ManageTasks"
+            component={ManageTasksScreen}
+            options={{ title: 'ניהול משימות' }}
+        />
+        <Stack.Screen
+            name="AddTask"
+            component={AddTaskScreen}
+            options={{ title: 'הוספת משימה' }}
+        />
+        <Stack.Screen
+            name="EditTask"
+            component={EditTaskScreen}
+            options={{ title: 'עריכת משימה' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+</file>
+
+<file path="app.json">
+{
+  "expo": {
+    "name": "TaskMate",
+    "slug": "TaskMate",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
+</file>
+
+<file path="babel.config.js">
+module.exports = function(api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+    plugins: [
+      ['module:react-native-dotenv']
+    ],
+  };
+};
+</file>
+
+<file path="eas.json">
+{
+  "cli": {
+    "version": ">= 16.25.1",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
+</file>
+
+<file path="index.js">
+import { registerRootComponent } from 'expo';
+
+import App from './App';
+
+// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
+// It also ensures that whether you load the app in Expo Go or in a native build,
+// the environment is set up appropriately
+registerRootComponent(App);
+</file>
+
+<file path="package.json">
+{
+  "name": "taskmate",
+  "license": "0BSD",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-picker/picker": "2.11.1",
+    "@react-navigation/native": "^7.1.14",
+    "@react-navigation/native-stack": "^7.3.21",
+    "axios": "^1.10.0",
+    "expo": "~54.0.0",
+    "expo-av": "~16.0.7",
+    "expo-dev-client": "~6.0.16",
+    "expo-speech": "~14.0.7",
+    "expo-status-bar": "~3.0.8",
+    "react": "^19.1.0",
+    "react-native": "^0.81.4",
+    "react-native-dotenv": "^3.4.11",
+    "react-native-pdf": "^7.0.3",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.16.0",
+    "react-native-video": "^6.17.0",
+    "react-native-webview": "^13.16.0",
+    "react-native-youtube-iframe": "^2.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "babel-preset-expo": "^54.0.3"
+  },
+  "private": true
+}
+</file>
+
+<file path="screens/class/AddClassScreen.js">
+// screens/AddListScreen.js
+import React, { useState } from 'react';
+import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import { createClass } from '../../utils/api';
+
+export default function AddClassScreen({ navigation }) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleSubmit = async () => {
+    if (!title.trim()) {
+      Alert.alert('נא להזין שם כיתה');
+      return;
+    }
+
+    try {
+      await createClass({ title, description });
+      navigation.goBack(); 
+    } catch (err) {
+      console.error('❌ שגיאה בהוספת רשימה:', err.message);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>שם הכיתה:</Text>
+      <TextInput
+        style={styles.input}
+        value={title}
+        onChangeText={setTitle}
+        placeholder="לדוגמה: מתמטיקה"
+      />
+      <Text style={styles.label}>תיאור הכיתה:</Text>
+      <TextInput
+        style={styles.input}
+        value={description}
+        onChangeText={setDescription}
+        placeholder="לדוגמה: שיעורי מתמטיקה לכיתה ח'"
+      />
+      <Button title="שמור כיתה" onPress={handleSubmit} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, justifyContent: 'center' },
+  label: { fontSize: 18, marginBottom: 12 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 20,
+    fontSize: 16,
+  },
+});
+</file>
+
+<file path="screens/class/AddManagerToClassScreen.js">
+import React, { useEffect, useState } from 'react';
+import {
+ View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Button,
+  StyleSheet,
+  ActivityIndicator
+} from 'react-native';
+import { getUsers, addManagerToClass } from '../../utils/api'; 
+
+
+
+export default function AddManagerToClassScreen({ navigation, route }) { 
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true); 
+    const [selectedUsersId, setSelectedUsersId] = useState([]);
+
+    const { class: classParams } = route.params;
+
+    useEffect(() => {
+         const fetchUsers = async () => {
+           try {
+                const response = await getUsers();
+                setUsers(response.data);
+              } catch (error) {
+                console.error('Error fetching users:', error);
+            } finally {
+                setLoading(false); 
+            }
+       };
+       fetchUsers();
+    }, []);
+
+    const handleUserPress = (userId) => {
+        setSelectedUsersId((prev) =>
+            prev.includes(userId)
+                ? prev.filter((id) => id !== userId)
+                : [...prev, userId]
+      );
+  };
+
+    const handleAddManager = async () => {
+        try {
+            await Promise.all(
+                selectedUsersId.map((userId) => addManagerToClass(classParams._id, userId))
+            );
+            navigation.goBack();
+        } catch (error) {  
+            console.error('Error adding users to class:', error);
+        }
+   };
+
+    if (loading) {
+        return <ActivityIndicator size="large" style={styles.loader} />
+    }
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>
+                הוסף מנהלים לכיתה
+            </Text>
+            <FlatList
+                data={users}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        onPress={() => handleUserPress(item._id)}
+                        style={[
+                            styles.userItem,
+                            selectedUsersId.includes(item._id) 
+                                ? styles.userSelected 
+                                : styles.userNotSelected
+                        ]}
+                    >
+                        
+                        <Text style={styles.userText}>{item.userName}</Text>
+                    </TouchableOpacity>
+                )}
+            />
+            <Button 
+                title="הוסף מנהלים נבחרים" 
+                onPress={handleAddManager} 
+                disabled={selectedUsersId.length === 0} 
+            />
+        </View>
+    );
+}
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: '#fff'
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        textAlign: 'center'
+    },
+    userItem: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        borderRadius: 8,
+        marginBottom: 8
+    },
+    userSelected: {
+        backgroundColor: '#d3e5ff', 
+        borderColor: '#007bff',
+        borderWidth: 1
+    },
+    userNotSelected: {
+        backgroundColor: '#f8f9fa' 
+    },
+    userText: {
+        fontSize: 18
+    }
+});
+</file>
+
+<file path="screens/class/AddUserToClassScreen.js">
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Button, // ⬅️ נוסף
+  StyleSheet, // ⬅️ נוסף
+  ActivityIndicator // ⬅️ נוסף
+} from 'react-native';
+import { getUsers, addUserToClass } from '../../utils/api'; // ⬅️ שם הפונקציה כבר היה תקין
+
+// ⬅️ הייבוא הכפול של TouchableOpacity נמחק
+
+export default function AddUserToClassScreen({ navigation, route }) { // ⬅️ נוסף route
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true); // ⬅️ נוסף
+    const [selectedUsersId, setSelectedUsersId] = useState([]);
+    
+    // ⬇️ תיקון: קבלת הפרמטר מה-route
+    const { class: classParams } = route.params; 
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await getUsers();
+                setUsers(response.data);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            } finally {
+                setLoading(false); // ⬅️ נוסף
+            }
+        };
+        fetchUsers();
+    }, []);
+
+    const handleUserPress = (userId) => {
+        setSelectedUsersId((prev) =>
+            prev.includes(userId)
+                ? prev.filter((id) => id !== userId)
+                : [...prev, userId]
+        );
+    };
+
+    const handleAddUsers = async () => {
+        try {
+             await Promise.all(
+                // ⬇️ תוקן לשימוש ב-classParams._id
+                selectedUsersId.map((userId) => addUserToClass(classParams._id, userId))
+            );
+            navigation.goBack();
+        } catch (error) {
+            console.error('Error adding users to class:', error);
+        }
+   };
+
+    if (loading) {
+        return <ActivityIndicator size="large" style={styles.loader} />
+    }
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>
+                הוסף משתמשים לכיתה
+            </Text>
+            <FlatList
+                data={users}
+                keyExtractor={(item) => item._id} // ⬅️ תוקן
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        onPress={() => handleUserPress(item._id)}
+                        style={[
+                            styles.userItem,
+                            // ⬇️ עיצוב הבחירה תוקן
+                            selectedUsersId.includes(item._id) 
+                                ? styles.userSelected 
+                                : styles.userNotSelected
+                        ]}
+                    >
+                        <Text style={styles.userText}>{item.userName }</Text>
+                    </TouchableOpacity>
+                )}
+            />
+            
+            <Button 
+                title="הוסף משתמשים נבחרים" 
+                onPress={handleAddUsers} 
+                disabled={selectedUsersId.length === 0} // ⬅️ הכפתור מבוטל אם לא נבחר כלום
+            />
+        </View>
+    );
+}
+
+// ⬇️ הוספת סטיילים לעיצוב נקי
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: '#fff'
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        textAlign: 'center'
+    },
+    userItem: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        borderRadius: 8,
+        marginBottom: 8
+    },
+    userSelected: {
+        backgroundColor: '#d3e5ff', // ⬅️ צבע כחול בהיר לבחירה
+        borderColor: '#007bff',
+        borderWidth: 1
+    },
+    userNotSelected: {
+        backgroundColor: '#f8f9fa' // ⬅️ צבע אפור בהיר
+    },
+    userText: {
+        fontSize: 18
+    }
+});
+</file>
+
+<file path="screens/class/AdminClassScreen.js">
+import React from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity,
+  ScrollView,
+  Alert 
+} from 'react-native';
+import { deleteClass } from '../../utils/api'; 
+
+export default function ClassAdminScreen({ navigation, route }) { 
+  const { class: classParams } = route.params;
+  
+  const handleDeleteClass = async () => {
+    Alert.alert(
+      'מחיקת כיתה', 
+      `האם אתה בטוח שברצונך למחוק את הכיתה "${classParams.title}"?`, 
+      [
+        { text: 'ביטול', style: 'cancel' },
+        {
+          text: 'מחק',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteClass(classParams._id);
+              navigation.navigate('Classes'); 
+            } catch (err) {
+              console.error('❌ שגיאה במחיקה:', err.message);
+              Alert.alert('שגיאה', 'לא ניתן היה למחוק את הכיתה.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  return (
+    <ScrollView style={styles.container}> 
+      <Text style={styles.title}>ניהול כיתה: {classParams.title}</Text>
+      
+      <View style={styles.gridContainer}>
+
+        <TouchableOpacity 
+          style={[styles.card, styles.studentsCard]} 
+          onPress={() => navigation.navigate('ClassStudents', { class: classParams })}
+        >
+          <Text style={styles.cardIcon}>👨‍🎓</Text>
+          <Text style={styles.cardText}>צפייה בתלמידים</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.card, styles.lessonCard]}
+          onPress={() => navigation.navigate('AddLesson', { 
+            classId: classParams._id 
+          })}
+        >
+          <Text style={styles.cardIcon}>📚</Text>
+          <Text style={styles.cardText}>הוספת שיעור חדש</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.card, styles.editCard]} 
+          onPress={() => navigation.navigate('EditClass', { 
+            classId: classParams._id,
+            currentTitle: classParams.title,
+            description: classParams.description
+          })}
+        >
+          <Text style={styles.cardIcon}>✏️</Text>
+          <Text style={styles.cardText}>עריכת פרטי כיתה</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={[styles.card, styles.deleteCard]}
+          onPress={handleDeleteClass}
+        >
+          <Text style={styles.cardIcon}>🗑️</Text>
+          <Text style={styles.cardText}>מחיקת כיתה</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.card, styles.addCard]} 
+          onPress={() => navigation.navigate('AddManager', { class: classParams })}
+        >
+          <Text style={styles.cardIcon}>➕</Text>
+          <Text style={styles.cardText}>הוספת מנהל</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.card, styles.removeCard]} 
+          onPress={() => navigation.navigate('DeleteManager', { class: classParams })}
+        >
+          <Text style={styles.cardIcon}>➖</Text>
+          <Text style={styles.cardText}>מחיקת מנהל</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.card, styles.addCard]} 
+          onPress={() => navigation.navigate('AddStudent', { class: classParams })}
+        >
+          <Text style={styles.cardIcon}>➕</Text>
+          <Text style={styles.cardText}>הוספת תלמיד</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.card, styles.removeCard]} 
+          onPress={() => navigation.navigate('DeleteStudent', { class: classParams })}
+        >
+          <Text style={styles.cardIcon}>➖</Text>
+          <Text style={styles.cardText}>מחיקת תלמיד</Text>
+        </TouchableOpacity>
+
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { 
+    flex: 1, 
+    padding: 16,
+    backgroundColor: '#f4f7f6' 
+  },
+  title: {
+    fontSize: 26, // גודל כמו במסך שיעורים
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 24,
+    color: '#333'
+  },
+  gridContainer: {
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justifyContent: 'space-between', 
+  },
+  card: {
+    width: '48%', 
+    backgroundColor: '#ffffff', 
+    padding: 20,
+    borderRadius: 12, // רדיוס כמו בכרטיסים האחרים
+    marginBottom: 16, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    minHeight: 150, 
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 3, // צל כמו בכרטיסים האחרים
+  },
+  studentsCard: {
+    borderColor: '#17a2b8', 
+    borderWidth: 1,
+  },
+  editCard: {
+    borderColor: '#FFC107', 
+    borderWidth: 1,
+  },
+  deleteCard: {
+    borderColor: '#F44336', 
+    borderWidth: 2, 
+    backgroundColor: '#fff8f8' 
+  },
+  lessonCard: {
+    borderColor: '#2196F3', 
+    borderWidth: 1,
+  },
+  addCard: {
+    borderColor: '#4CAF50', 
+    borderWidth: 1,
+  },
+  removeCard: {
+    borderColor: '#F44336', 
+    borderWidth: 1,
+  },
+  cardIcon: {
+    fontSize: 32,
+    marginBottom: 12,
+  },
+  cardText: {
+    fontSize: 16, // גודל כמו בכרטיסים בדף הניהול הקודם
+    fontWeight: '600', 
+    color: '#333',
+    textAlign: 'center',
+  },
+});
+</file>
+
+<file path="screens/class/ClassScreen.js">
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
+import {
+  getClassesForUser,
+  getClassesForManager,
+} from '../../utils/api';
+
+export default function ClassScreen({ navigation, route }) {
+  const [allClasses, setAllClasses] = useState([]);
+  const [managedClassIds, setManagedClassIds] = useState(new Set());
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchRoleAndClasses();
+    });
+
+    const fetchRoleAndClasses = async () => {
+      try {
+        const manager = (await getClassesForManager()).data;
+        const user = (await getClassesForUser()).data;
+        
+        const filteredUser = user.filter(
+          (userClass) => !manager.some((managedClass) => managedClass._id === userClass._id)
+        );
+        
+        setAllClasses([...manager, ...filteredUser]);
+        
+        setManagedClassIds(new Set(manager.map(cls => cls._id)));
+
+      } catch (err) {
+        console.error('❌ שגיאה בטעינת רשימות:', err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoleAndClasses();
+    
+    return unsubscribe;
+  }, [navigation]);
+  const renderClassItem = ({ item }) => {
+    const isManager = managedClassIds.has(item._id);
+
+    return (
+      <View style={[styles.card, isManager ? styles.managerCard : styles.userCard]}>
+       
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() =>
+            navigation.navigate('Lessons', {
+              class: item,
+            })
+          }>
+          <Text style={styles.cardText}>{item.title}</Text>
+          
+          {item.description && ( 
+            <Text style={styles.cardDescription}>{item.description}</Text>
+          )}
+        </TouchableOpacity>
+
+        {isManager && (
+          <View style={styles.actionButtons}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() =>
+                navigation.navigate('AdminClass', {
+                  class: item,
+                })
+              }>
+              <Text style={styles.iconText}>⚙️</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    );
+  };
+  
+
+
+  if (loading) return <ActivityIndicator size="large" style={{ flex: 1, justifyContent: 'center' }} />;
+  
+  const filteredClasses = allClasses.filter((cls) =>
+    cls.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>הכיתות שלי</Text>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="חיפוש כיתה..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+      
+      <TouchableOpacity
+        style={styles.createButton}
+        onPress={() => navigation.navigate('AddClass')}
+      >
+        <Text style={styles.createButtonText}>➕ יצירת כיתה חדשה</Text>
+      </TouchableOpacity>
+
+      <FlatList
+        data={filteredClasses}
+        keyExtractor={(item) => item._id}
+        renderItem={renderClassItem}
+        ListEmptyComponent={<Text style={styles.emptyListText}>לא נמצאו כיתות</Text>}
+        style={{ marginTop: 16 }}
+      />
+    </View>
+  );
+}
+
+// ⬇️ --- הוספנו סטייל חדש --- ⬇️
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f4f7f6',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#333',
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#555',
+    marginBottom: 12,
+    marginTop: 16,
+    textAlign: 'right',
+  },
+  searchInput: {
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    fontSize: 16,
+    marginBottom: 16,
+    textAlign: 'right',
+  },
+  createButton: {
+    backgroundColor: '#007AFF',
+    padding: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  createButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    marginBottom: 12,
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 3,
+  },
+  managerCard: {
+    borderRightWidth: 4,
+    borderRightColor: '#007AFF',
+  },
+  userCard: {
+    borderRightWidth: 4,
+    borderRightColor: '#6c757d',
+  },
+  cardText: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#333',
+    textAlign: 'right',
+  },
+  // הסטייל החדש לתיאור
+  cardDescription: {
+    fontSize: 14,
+    color: '#6c757d', // צבע אפור
+    textAlign: 'right',
+    marginTop: 4, // רווח קטן מהכותרת
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    marginLeft: 10,
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#f0f0f0',
+  },
+  iconText: {
+    fontSize: 18,
+  },
+  emptyListText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#888',
+    marginTop: 20,
+    marginBottom: 20,
+  }
+});
+</file>
+
+<file path="screens/class/ClassStatsScreen.js">
+import React, { useEffect, useState, useCallback } from 'react';
+import { 
+  View, 
+  Text, 
+  FlatList, 
+  StyleSheet, 
+  ActivityIndicator, 
+  ScrollView 
+} from 'react-native';
+// נצטרך לייבא פונקציות API רבות
+import { getUsers, getLessonsForClass, getAllFiles, getTasks } from '../../utils/api'; 
+
+export default function ClassStatsScreen({ navigation, route }) { 
+    const { class: classParams } = route.params; 
+    
+    const [students, setStudents] = useState([]); // רשימת תלמידים בכיתה
+    const [tasksData, setTasksData] = useState([]); // רשימה מאורגנת של כל המשימות בכיתה
+    const [loading, setLoading] = useState(true); 
+
+    // פונקציה מורכבת לשליפת כל הנתונים הנדרשים
+    const fetchAllData = useCallback(async () => {
+        try {
+            setLoading(true);
+            const memberIds = classParams.members || [];
+            
+            // 1. קבלת פרטי התלמידים
+            const usersResponse = await getUsers();
+            const allUsers = usersResponse.data;
+            const classStudents = allUsers.filter(user => memberIds.includes(user._id));
+            setStudents(classStudents);
+
+            // 2. קבלת כל השיעורים בכיתה
+            const lessonsResponse = await getLessonsForClass(classParams._id);
+            const lessons = lessonsResponse.data;
+            
+            // 3. קבלת כל הקבצים מכל השיעורים
+            const filesPromises = lessons.map(lesson => getAllFiles(lesson._id));
+            const filesResponses = await Promise.all(filesPromises);
+            const allFiles = filesResponses.flatMap(res => res.data); // מערך שטוח של כל הקבצים
+
+            // 4. קבלת כל המשימות מכל הקבצים
+            const tasksPromises = allFiles.map(file => getTasks(file._id));
+            const tasksResponses = await Promise.all(tasksPromises);
+            const allTasks = tasksResponses.flatMap(res => res.data); // מערך שטוח של כל המשימות בכיתה
+            
+            // שמירת המשימות ב-state (נארגן אותן אח"כ ב-JSX)
+            setTasksData(allTasks);
+
+        } catch (err) {
+            console.error('❌ שגיאה בטעינת נתוני סטטיסטיקה:', err.message);
+            // אפשר להוסיף Alert
+        } finally {
+            setLoading(false);
+        }
+    }, [classParams]);
+
+    useEffect(() => {
+        fetchAllData();
+    }, [fetchAllData]);
+
+    // פונקציית רינדור למשימה בתוך הכרטיס של התלמיד
+    const renderTaskStatItem = (task, studentId) => {
+        const isCompleted = task.completedBy?.includes(studentId);
+        return (
+            <View key={task._id} style={styles.taskItem}>
+                <Text style={styles.taskTitle}>{task.title}</Text>
+                <Text style={[styles.taskStatus, isCompleted ? styles.completed : styles.notCompleted]}>
+                    {isCompleted ? '✓ בוצע' : '✗ לא בוצע'}
+                </Text>
+            </View>
+        );
+    };
+
+    // פונקציית רינדור לכרטיס של כל תלמיד
+    const renderStudentStats = ({ item: student }) => {
+        // סינון המשימות הרלוונטיות לתלמיד זה
+        const relevantTasks = tasksData.filter(task => 
+            !task.assignedTo || 
+            task.assignedTo.length === 0 || 
+            task.assignedTo.includes(student._id)
+        );
+
+        return (
+            <View style={styles.studentCard}>
+                <Text style={styles.studentName}>{student.userName || student.name}</Text>
+                {relevantTasks.length > 0 ? (
+                    relevantTasks.map(task => renderTaskStatItem(task, student._id))
+                ) : (
+                    <Text style={styles.noTasksText}>אין משימות משויכות לתלמיד זה</Text>
+                )}
+            </View>
+        );
+    };
+
+
+    if (loading) {
+        return <ActivityIndicator size="large" style={styles.loader} />
+    }
+
+    return (
+        <ScrollView style={styles.container}>
+            <Text style={styles.title}>סטטיסטיקות כיתה: {classParams.title}</Text>
+            
+            {students.length > 0 ? (
+                <FlatList
+                    data={students}
+                    renderItem={renderStudentStats}
+                    keyExtractor={(student) => student._id}
+                    scrollEnabled={false} // מכיוון שה-ScrollView החיצוני גולל
+                />
+            ) : (
+                <Text style={styles.emptyText}>אין תלמידים בכיתה להצגת סטטיסטיקה</Text>
+            )}
+        </ScrollView>
+    );
+}
+
+// סטיילים
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: '#f4f7f6'
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 24,
+        color: '#333'
+    },
+    studentCard: {
+        backgroundColor: '#ffffff',
+        borderRadius: 12,
+        marginBottom: 16,
+        padding: 16,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    studentName: {
+        fontSize: 18,
+        fontWeight: '600',
+        textAlign: 'right',
+        marginBottom: 10,
+        paddingBottom: 6,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+        color: '#007AFF' // צבע שם התלמיד
+    },
+    taskItem: {
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+    },
+    taskTitle: {
+        fontSize: 15,
+        color: '#333',
+        flex: 1, // לתת לטקסט להתפרס
+        marginRight: 8,
+        textAlign: 'right',
+    },
+    taskStatus: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginLeft: 8,
+    },
+    completed: {
+        color: '#28a745', // ירוק
+    },
+    notCompleted: {
+        color: '#dc3545', // אדום
+    },
+    noTasksText: {
+        fontSize: 14,
+        color: '#888',
+        textAlign: 'center',
+        paddingVertical: 10,
+    },
+    emptyText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#888',
+        marginTop: 40
+    }
+});
+</file>
+
+<file path="screens/class/ClassStudentsScreen.js">
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet, 
+  ActivityIndicator 
+} from 'react-native';
+// אנו צריכים רק את getUsers כדי לסנן את רשימת החברים
+import { getUsers } from '../../utils/api'; 
+
+export default function ClassStudentsScreen({ navigation, route }) { 
+    const [students, setStudents] = useState([]); // רשימת התלמידים
+    const [loading, setLoading] = useState(true); 
+    
+    // נקבל את כל פרטי הכיתה
+    const { class: classParams } = route.params; 
+
+    useEffect(() => {
+        const fetchClassMembers = async () => {
+          try {
+            // 1. קח את רשימת ה-ID של חברי הכיתה
+            const memberIds = classParams.members || []; 
+            
+            // 2. קח את כל המשתמשים
+            const response = await getUsers();
+            const allUsers = response.data;
+
+            // 3. סנן את כל המשתמשים כדי להציג רק את מי שחבר בכיתה
+            const filteredMembers = allUsers.filter(user => 
+                memberIds.includes(user._id)
+            );
+            
+            setStudents(filteredMembers); // שמור את חברי הכיתה
+    
+          } catch (err) {
+            console.error('❌ שגיאה בטעינת תלמידים:', err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        fetchClassMembers();
+    }, [classParams.members]);
+
+    // פונקציה שתטפל בלחיצה על תלמיד
+    const handleStudentPress = (student) => {
+      console.log('נלחץ על תלמיד:', student.userName);
+      // TODO: בעתיד, נווט מכאן למסך הסטטיסטיקות
+      // navigation.navigate('StudentStatsScreen', { student: student, classId: classParams._id });
+    };
+
+    if (loading) {
+        return <ActivityIndicator size="large" style={styles.loader} />
+    }
+
+    // פונקציית הרינדור של כל פריט
+    const renderStudentItem = ({ item }) => (
+      <TouchableOpacity 
+        style={styles.card} 
+        onPress={() => handleStudentPress(item)}
+      >
+        {/* אפשר להוסיף כאן תמונת פרופיל בעתיד */}
+        <Text style={styles.cardText}>{item.userName}</Text>
+        <Text style={styles.cardText}>{item.firstName}</Text>
+        <Text style={styles.cardText}>{item.lastName}</Text>
+        <Text style={styles.cardArrow}>›</Text>
+      </TouchableOpacity>
+    );
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>
+                התלמידים ב-{classParams.title}
+            </Text>
+            <TouchableOpacity
+                style={styles.createButton}
+                onPress={() => navigation.navigate('ClassStats', { class: classParams })}
+            >
+                <Text style={styles.createButtonText}>קבלת סטטיסטיקות</Text>
+            </TouchableOpacity>
+            <FlatList
+                data={students}
+                keyExtractor={(item) => item._id} 
+                renderItem={renderStudentItem}
+                ListEmptyComponent={<Text style={styles.emptyText}>עדיין אין תלמידים בכיתה זו</Text>}
+            />
+        </View>
+    );
+}
+
+// עיצוב נקי ומודרני
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: '#f4f7f6'
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        marginBottom: 24,
+        textAlign: 'center',
+        color: '#333'
+    },
+    card: {
+        backgroundColor: '#ffffff',
+        borderRadius: 12,
+        marginBottom: 12,
+        flexDirection: 'row-reverse',
+        alignItems: 'center',
+        padding: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
+        elevation: 3,
+    },
+    cardText: {
+        fontSize: 18,
+        flex: 1, // גורם לשם למלא את כל המקום
+        fontWeight: '500',
+        color: '#333',
+        textAlign: 'right',
+    },
+    cardArrow: {
+        fontSize: 24,
+        color: '#b0b0b0', // חץ אפור
+        marginLeft: 10,
+    },
+    emptyText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#888',
+        marginTop: 40
+    },
+    createButton: {
+    backgroundColor: '#007AFF',
+    padding: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  createButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+});
+</file>
+
+<file path="screens/class/DeleteManagerFromClassScreen.js">
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Button, 
+  StyleSheet, 
+  ActivityIndicator 
+} from 'react-native';
+// ⬇️ ייבוא הפונקציה הרלוונטית למחיקת משתמש
+import { getUsers, removeManagerFromClass } from '../../utils/api'; 
+
+// ⬇️ שם הקומפוננטה שונה
+export default function DeleteManagerFromClassScreen({ navigation, route }) { 
+    const [managers, setManagers] = useState([]); // זו תהיה רשימת המנהלים בכיתה
+    const [loading, setLoading] = useState(true); 
+    const [selectedManagersId, setSelectedManagersId] = useState([]);
+    
+    const { class: classParams } = route.params; 
+
+    useEffect(() => {
+        const fetchClassManagers = async () => { // ⬅️ שם הפונקציה שונה
+          try {
+            // 1. קח את רשימת ה-ID של חברי הכיתה
+            const managerIds = classParams.managers || []; // ⬅️ שונה ל-managers
+            
+            // 2. קח את כל המשתמשים
+            const response = await getUsers();
+            const allUsers = response.data;
+
+            // 3. סנן את כל המשתמשים כדי להציג רק את מי שחבר בכיתה
+            const filteredManagers = allUsers.filter(user => 
+                managerIds.includes(user._id)
+            );
+
+            setManagers(filteredManagers); // ⬅️ שמור את המנהלים בכיתה בלבד
+
+          } catch (err) {
+            console.error('❌ שגיאה בטעינת רשימות:', err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchClassManagers();
+    }, [classParams.managers]); // ⬅️ שונה ל-managers
+
+    const handleManagerPress = (managerId) => {
+        setSelectedManagersId((prev) =>
+            prev.includes(managerId)
+                ? prev.filter((id) => id !== managerId)
+                : [...prev, managerId]
+        );
+    };
+
+    // ⬇️ שם הפונקציה שונה
+    const handleDeleteManager = async () => {
+        try {
+            await Promise.all(
+                // ⬇️ קריאה לפונקציית ה-API הנכונה
+                selectedManagersId.map((managerId) => removeManagerFromClass(classParams._id, managerId))
+            );
+            navigation.goBack();
+        } catch (error) {
+            console.error('Error deleting managers:', error);
+        }
+    };
+
+    if (loading) {
+        return <ActivityIndicator size="large" style={styles.loader} />
+    }
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>
+                מחק מנהלים מהכיתה
+            </Text>
+            <FlatList
+                data={managers}
+                keyExtractor={(item) => item._id} 
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        onPress={() => handleManagerPress(item._id)}
+                        style={[
+                            styles.userItem,
+                            selectedManagersId.includes(item._id) 
+                                ? styles.userSelected 
+                                : styles.userNotSelected
+                        ]}
+                    >
+                        <Text style={styles.userText}>{item.userName}</Text>
+                    </TouchableOpacity>
+                )}
+                // ⬇️ טקסט ריק שונה
+                ListEmptyComponent={<Text style={styles.emptyText}>אין מנהלים בכיתה זו</Text>}
+            />
+            
+            <Button 
+                // ⬇️ טקסט כפתור שונה
+                title="מחק מנהלים נבחרים" 
+                onPress={handleDeleteManager} // ⬅️ קורא לפונקציה הנכונה
+                disabled={selectedManagersId.length === 0}
+                color="#F44336" 
+            />
+        </View>
+    );
+}
+
+// ... הסטיילים זהים לקובץ הקודם ...
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: '#fff'
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        textAlign: 'center'
+    },
+    userItem: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        borderRadius: 8,
+        marginBottom: 8
+    },
+    userSelected: {
+        backgroundColor: '#ffebee', 
+        borderColor: '#F44336',
+        borderWidth: 1
+    },
+    userNotSelected: {
+        backgroundColor: '#f8f9fa' 
+    },
+    userText: {
+        fontSize: 18
+    },
+    emptyText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#666',
+        marginTop: 20
+    }
+});
+</file>
+
+<file path="screens/class/DeleteUserFromClassScreen.js">
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Button, 
+  StyleSheet, 
+  ActivityIndicator 
+} from 'react-native';
+// ⬇️ ייבוא הפונקציה הרלוונטית למחיקת משתמש
+import { getUsers, removeUserFromClass } from '../../utils/api'; 
+
+// ⬇️ שם הקומפוננטה שונה
+export default function DeleteUserFromClassScreen({ navigation, route }) { 
+    const [users, setUsers] = useState([]); // זו תהיה רשימת המשתמשים בכיתה
+    const [loading, setLoading] = useState(true); 
+    const [selectedUsersId, setSelectedUsersId] = useState([]);
+    
+    const { class: classParams } = route.params; 
+
+    useEffect(() => {
+        const fetchClassMembers = async () => { // ⬅️ שם הפונקציה שונה
+          try {
+            // 1. קח את רשימת ה-ID של חברי הכיתה
+            const memberIds = classParams.members || []; // ⬅️ שונה ל-members
+            
+            // 2. קח את כל המשתמשים
+            const response = await getUsers();
+            const allUsers = response.data;
+
+            // 3. סנן את כל המשתמשים כדי להציג רק את מי שחבר בכיתה
+            const filteredMembers = allUsers.filter(user => 
+                memberIds.includes(user._id)
+            );
+            
+            setUsers(filteredMembers); // ⬅️ שמור את חברי הכיתה בלבד
+    
+          } catch (err) {
+            console.error('❌ שגיאה בטעינת רשימות:', err.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        fetchClassMembers();
+    }, [classParams.members]); // ⬅️ שונה ל-members
+
+    const handleUserPress = (userId) => {
+        setSelectedUsersId((prev) =>
+            prev.includes(userId)
+                ? prev.filter((id) => id !== userId)
+                : [...prev, userId]
+        );
+    };
+
+    // ⬇️ שם הפונקציה שונה
+    const handleDeleteUser = async () => {
+        try {
+            await Promise.all(
+                // ⬇️ קריאה לפונקציית ה-API הנכונה
+                selectedUsersId.map((userId) => removeUserFromClass(classParams._id, userId))
+            );
+            navigation.goBack();
+        } catch (error) {
+            console.error('Error deleting users:', error);
+        }
+    };
+
+    if (loading) {
+        return <ActivityIndicator size="large" style={styles.loader} />
+    }
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>
+                מחק משתמשים מהכיתה
+            </Text>
+            <FlatList
+                data={users}
+                keyExtractor={(item) => item._id} 
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        onPress={() => handleUserPress(item._id)}
+                        style={[
+                            styles.userItem,
+                            selectedUsersId.includes(item._id) 
+                                ? styles.userSelected 
+                                : styles.userNotSelected
+                        ]}
+                    >
+                        <Text style={styles.userText}>{item.userName || item.name}</Text>
+                    </TouchableOpacity>
+                )}
+                // ⬇️ טקסט ריק שונה
+                ListEmptyComponent={<Text style={styles.emptyText}>אין משתמשים בכיתה זו</Text>}
+            />
+            
+            <Button 
+                // ⬇️ טקסט כפתור שונה
+                title="מחק משתמשים נבחרים" 
+                onPress={handleDeleteUser} // ⬅️ קורא לפונקציה הנכונה
+                disabled={selectedUsersId.length === 0}
+                color="#F44336" 
+            />
+        </View>
+    );
+}
+
+// ... הסטיילים זהים לקובץ הקודם ...
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: '#fff'
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        textAlign: 'center'
+    },
+    userItem: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        borderRadius: 8,
+        marginBottom: 8
+    },
+    userSelected: {
+        backgroundColor: '#ffebee', 
+        borderColor: '#F44336',
+        borderWidth: 1
+    },
+    userNotSelected: {
+        backgroundColor: '#f8f9fa' 
+    },
+    userText: {
+        fontSize: 18
+    },
+    emptyText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#666',
+        marginTop: 20
+    }
+});
+</file>
+
+<file path="screens/class/EditClassScreen.js">
+// screens/EditListScreen.js
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { updateClass } from '../../utils/api';
+import { useRoute } from '@react-navigation/native';
+
+export default function EditClassScreen({  navigation }) {
+    const route = useRoute();
+  const { classId, currentTitle, description } = route.params;   
+  const [title, setTitle] = useState(currentTitle);
+  const [desc, setDesc] = useState(description);
+
+  const handleUpdate = async () => {
+    if (!title.trim()) {
+      Alert.alert('יש להזין שם כיתה');
+      return;
+    }
+    try {
+      await updateClass(classId, { title, description: desc });
+      navigation.goBack();
+    } catch (err) {
+      console.error('שגיאה בעדכון כיתה:', err.message);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>עריכת כיתה:</Text>
+      <TextInput
+        style={styles.input}
+        value={title}
+        onChangeText={setTitle}
+        placeholder="שם הכיתה"
+      />
+      <TextInput
+        style={styles.input}
+        value={desc}
+        onChangeText={setDesc}
+        placeholder="תיאור הכיתה"
+      />
+      <Button title="שמור שינויים" onPress={handleUpdate} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, justifyContent: 'center' },
+  label: { fontSize: 18, marginBottom: 12 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 20,
+    fontSize: 16,
+  },
+});
+</file>
+
+<file path="screens/file/AddFileScreen.js">
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity, // הוספנו
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+  ScrollView 
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker'; // רכיב לבחירת סוג קובץ
+import { uploadFile } from '../../utils/api'; // הפונקציה להעלאת קובץ
+
+export default function AddFileScreen({ navigation, route }) {
+  const { lessonId } = route.params; // ID של השיעור אליו נוסיף קובץ
+
+  const [fileName, setFileName] = useState('');
+  const [fileUrl, setFileUrl] = useState('');
+  const [fileType, setFileType] = useState('doc'); // ערך ברירת מחדל
+  const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleAddFile = async () => {
+    if (!fileName.trim() || !fileUrl.trim()) {
+      Alert.alert('שגיאה', 'יש למלא שם קובץ וקישור.');
+      return;
+    }
+
+    // ולידציה בסיסית של URL (אפשר לשפר)
+    if (!fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
+       Alert.alert('שגיאה', 'הקישור חייב להתחיל ב-http:// או https://');
+       return;
+    }
+
+    setLoading(true);
+    try {
+      const fileData = {
+        fileName,
+        fileUrl,
+        fileType,
+        lessonId,
+        description,
+      };
+      await uploadFile(fileData);
+      Alert.alert('הצלחה', 'הקובץ נוסף בהצלחה!');
+      navigation.goBack(); // חזרה למסך הקודם (ניהול שיעור)
+    } catch (error) {
+      console.error('שגיאה בהוספת קובץ:', error);
+      Alert.alert('שגיאה', 'לא ניתן היה להוסיף את הקובץ.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>הוספת קובץ חדש</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="שם הקובץ *"
+        value={fileName}
+        onChangeText={setFileName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="קישור (URL) לקובץ *"
+        value={fileUrl}
+        onChangeText={setFileUrl}
+        keyboardType="url" // מקלדת מתאימה ל-URL
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={[styles.input, styles.textArea]} // סטייל לשדה תיאור
+        placeholder="תיאור (אופציונלי)"
+        value={description}
+        onChangeText={setDescription}
+        multiline // מאפשר מספר שורות
+      />
+
+      <Text style={styles.label}>בחר סוג קובץ:</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={fileType}
+          style={styles.picker}
+          onValueChange={(itemValue) => setFileType(itemValue)}
+        >
+          <Picker.Item label="מסמך (doc)" value="doc" />
+          <Picker.Item label="PDF" value="pdf" />
+          <Picker.Item label="תמונה (image)" value="image" />
+          <Picker.Item label="וידאו (video)" value="video" />
+          <Picker.Item label="שמע (audio)" value="audio" />
+        </Picker>
+      </View>
+
+      {loading ? (
+        <ActivityIndicator size="large" style={styles.loader} />
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={handleAddFile}>
+            <Text style={styles.buttonText}>הוסף קובץ</Text>
+        </TouchableOpacity>
+      )}
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f4f7f6',
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 24,
+    color: '#333',
+  },
+  input: {
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    fontSize: 16,
+    marginBottom: 16,
+    textAlign: 'right',
+  },
+  textArea: {
+    minHeight: 100, // גובה מינימלי לתיאור
+    textAlignVertical: 'top', // התחלת טקסט מלמעלה
+  },
+  label: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 8,
+    textAlign: 'right',
+  },
+  pickerContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    marginBottom: 20,
+    overflow: 'hidden', // חשוב לפינות ב-Android
+  },
+  picker: {
+    // הסטייל כאן מינימלי כי Picker מתנהג שונה בפלטפורמות
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    padding: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  loader: {
+      marginTop: 20,
+  }
+});
+</file>
+
+<file path="screens/file/EditFileScreen.js">
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity, // הוספנו
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+  ScrollView 
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { updateFile } from '../../utils/api';
+
+export default function EditFileScreen({ navigation, route }) {
+  const { file } = route.params; // הקובץ המלא לעריכה
+
+  // אתחול ה-state עם הערכים הנוכחיים של הקובץ
+  const [fileName, setFileName] = useState(file.fileName);
+  const [fileUrl, setFileUrl] = useState(file.fileUrl);
+  const [fileType, setFileType] = useState(file.fileType);
+  const [description, setDescription] = useState(file.description || '');
+  const [loading, setLoading] = useState(false);
+
+  const handleUpdateFile = async () => {
+    if (!fileName.trim() || !fileUrl.trim()) {
+      Alert.alert('שגיאה', 'יש למלא שם קובץ וקישור.');
+      return;
+    }
+     if (!fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
+       Alert.alert('שגיאה', 'הקישור חייב להתחיל ב-http:// או https://');
+       return;
+    }
+
+    setLoading(true);
+    try {
+      const updatedData = {
+        fileName,
+        fileUrl,
+        fileType,
+        description,
+        lessonId: file.lessonId // חשוב לשלוח גם את lessonId
+      };
+      await updateFile(file._id, updatedData); // שלח ID ונתונים מעודכנים
+      Alert.alert('הצלחה', 'הקובץ עודכן בהצלחה!');
+      navigation.goBack(); // חזרה לרשימת הקבצים
+    } catch (error) {
+      console.error('שגיאה בעדכון קובץ:', error);
+      Alert.alert('שגיאה', 'לא ניתן היה לעדכן את הקובץ.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>עריכת קובץ</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="שם הקובץ *"
+        value={fileName}
+        onChangeText={setFileName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="קישור (URL) לקובץ *"
+        value={fileUrl}
+        onChangeText={setFileUrl}
+        keyboardType="url"
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={[styles.input, styles.textArea]}
+        placeholder="תיאור (אופציונלי)"
+        value={description}
+        onChangeText={setDescription}
+        multiline
+      />
+
+      <Text style={styles.label}>בחר סוג קובץ:</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={fileType}
+          style={styles.picker}
+          onValueChange={(itemValue) => setFileType(itemValue)}
+        >
+          <Picker.Item label="מסמך (doc)" value="doc" />
+          <Picker.Item label="PDF" value="pdf" />
+          <Picker.Item label="תמונה (image)" value="image" />
+          <Picker.Item label="וידאו (video)" value="video" />
+          <Picker.Item label="שמע (audio)" value="audio" />
+        </Picker>
+      </View>
+
+      {loading ? (
+        <ActivityIndicator size="large" style={styles.loader}/>
+      ) : (
+         <TouchableOpacity style={styles.button} onPress={handleUpdateFile}>
+            <Text style={styles.buttonText}>שמור שינויים</Text>
+        </TouchableOpacity>
+      )}
+    </ScrollView>
+  );
+}
+
+// סטיילים זהים ל-AddFileScreen
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, backgroundColor: '#f4f7f6' },
+  title: { fontSize: 26, fontWeight: 'bold', textAlign: 'center', marginBottom: 24, color: '#333' },
+  input: { backgroundColor: '#ffffff', paddingHorizontal: 16, paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: '#e0e0e0', fontSize: 16, marginBottom: 16, textAlign: 'right' },
+  textArea: { minHeight: 100, textAlignVertical: 'top' },
+  label: { fontSize: 16, color: '#555', marginBottom: 8, textAlign: 'right' },
+  pickerContainer: { backgroundColor: '#ffffff', borderRadius: 12, borderWidth: 1, borderColor: '#e0e0e0', marginBottom: 20, overflow: 'hidden' },
+  picker: {},
+  button: { backgroundColor: '#007AFF', padding: 14, borderRadius: 12, alignItems: 'center', marginTop: 10 },
+  buttonText: { color: '#ffffff', fontSize: 16, fontWeight: 'bold' },
+  loader: { marginTop: 20 }
+});
+</file>
+
+<file path="screens/file/ManageFilesScreen.js">
+import React, { useEffect, useState, useCallback } from 'react';
+import { 
+  View, 
+  Text, 
+  FlatList, 
+  TouchableOpacity, 
+  StyleSheet, 
+  ActivityIndicator, 
+  Alert 
+} from 'react-native';
+import { getAllFiles, deleteFile } from '../../utils/api'; 
+
+const getFileIcon = (fileType) => { /* ... פונקציה כמו קודם ... */ };
+
+export default function ManageFilesScreen({ navigation, route }) {
+  const { lessonId } = route.params;
+  const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchFiles = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await getAllFiles(lessonId);
+      setFiles(response.data);
+    } catch (error) {
+      console.error("שגיאה בטעינת קבצים:", error);
+      Alert.alert("שגיאה", "לא ניתן לטעון את רשימת הקבצים.");
+    } finally {
+      setLoading(false);
+    }
+  }, [lessonId]);
+
+  useEffect(() => {
+    // טעינה ראשונית ורענון בעת חזרה למסך
+    const unsubscribe = navigation.addListener('focus', fetchFiles);
+    fetchFiles();
+    return unsubscribe;
+  }, [navigation, fetchFiles]);
+
+  const handleDeleteFile = (file) => {
+    Alert.alert(
+      "מחיקת קובץ",
+      `האם למחוק את הקובץ "${file.fileName}"?`,
+      [
+        { text: "ביטול", style: "cancel" },
+        { 
+          text: "מחק", 
+          style: "destructive", 
+          onPress: async () => {
+            try {
+              await deleteFile(file._id);
+              setFiles(currentFiles => currentFiles.filter(f => f._id !== file._id));
+            } catch (error) {
+              console.error("שגיאה במחיקת קובץ:", error);
+              Alert.alert("שגיאה", "לא ניתן היה למחוק את הקובץ.");
+            }
+          } 
+        }
+      ]
+    );
+  };
+
+  const renderFileItem = ({ item }) => (
+    <View style={styles.card}>
+       <Text style={styles.fileIcon}>{getFileIcon(item.fileType)}</Text>
+       <View style={styles.fileInfo}>
+          <Text style={styles.fileName}>{item.fileName}</Text>
+          {item.description && <Text style={styles.fileDescription}>{item.description}</Text>}
+       </View>
+       <View style={styles.actionButtons}>
+          <TouchableOpacity 
+             style={styles.iconButton}
+             onPress={() => navigation.navigate('EditFile', { file: item })}
+          >
+             <Text style={styles.iconText}>✏️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+             style={[styles.iconButton, styles.deleteButton]}
+             onPress={() => handleDeleteFile(item)}
+          >
+             <Text style={styles.iconText}>🗑️</Text>
+          </TouchableOpacity>
+       </View>
+    </View>
+  );
+
+  if (loading) return <ActivityIndicator size="large" style={styles.loader} />;
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>ניהול קבצים</Text>
+      <FlatList
+        data={files}
+        keyExtractor={(item) => item._id}
+        renderItem={renderFileItem}
+        ListEmptyComponent={<Text style={styles.emptyText}>אין קבצים בשיעור זה</Text>}
+      />
+    </View>
+  );
+}
+
+// סטיילים דומים למסכי רשימות קודמים
+const styles = StyleSheet.create({
+    container: { flex: 1, padding: 16, backgroundColor: '#f4f7f6' },
+    title: { fontSize: 26, fontWeight: 'bold', textAlign: 'center', marginBottom: 24, color: '#333' },
+    loader: { flex: 1, justifyContent: 'center' },
+    card: { backgroundColor: '#ffffff', borderRadius: 12, marginBottom: 12, flexDirection: 'row-reverse', alignItems: 'center', padding: 16, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 2 },
+    fileIcon: { fontSize: 24, marginRight: 12 },
+    fileInfo: { flex: 1 },
+    fileName: { fontSize: 17, fontWeight: '600', color: '#333', textAlign: 'right' },
+    fileDescription: { fontSize: 14, color: '#6c757d', textAlign: 'right', marginTop: 2 },
+    actionButtons: { flexDirection: 'row', gap: 10, marginLeft: 10 },
+    iconButton: { padding: 8, borderRadius: 20, backgroundColor: '#f0f0f0' },
+    deleteButton: { backgroundColor: '#ffebee' }, // רקע אדמדם למחיקה
+    iconText: { fontSize: 18 },
+    emptyText: { textAlign: 'center', fontSize: 16, color: '#888', marginTop: 40 },
+});
+</file>
+
+<file path="screens/lesson/AddLessonScreen.js">
+// screens/AddListScreen.js
+import React, { useState } from 'react';
+import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import { createLesson } from '../../utils/api';
+
+export default function AddLessonScreen({ navigation, route }) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const ClassId = route.params.class._id;
+
+  const handleSubmit = async () => {
+    if (!title.trim()) {
+      Alert.alert('נא להזין שם שיעור');
+      return;
+    }
+
+    try {
+      await createLesson({ title, description, ClassId });
+      navigation.goBack(); 
+    } catch (err) {
+      console.error('❌ שגיאה בהוספת השיעור:', err.message);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>שם השיעור:</Text>
+      <TextInput
+        style={styles.input}
+        value={title}
+        onChangeText={setTitle}
+        placeholder="לדוגמה: מתמטיקה"
+      />
+      <Text style={styles.label}>תיאור השיעור:</Text>
+      <TextInput
+        style={styles.input}
+        value={description}
+        onChangeText={setDescription}
+        placeholder="לדוגמה: שיעור מספר 1"
+      />
+      <Button title="שמור שיעור" onPress={handleSubmit} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, justifyContent: 'center' },
+  label: { fontSize: 18, marginBottom: 12 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 20,
+    fontSize: 16,
+  },
+});
+</file>
+
+<file path="screens/lesson/AdminLessonScreen.js">
+import React from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity,
+  ScrollView,
+  Alert 
+} from 'react-native';
+// ייבא פונקציות API רלוונטיות בעתיד
+
+export default function AdminLessonScreen({ navigation, route }) { 
+  const { lesson } = route.params;
+  const classParams = route.params.classParams; // מקבלים את פרטי השיעור
+  
+  // פונקציות לטיפול בלחיצות (ימולאו בהמשך)
+  const handleAddFile = () => {
+    navigation.navigate('AddFile', { lessonId: lesson._id }); 
+  };
+
+  const handleManageFiles = () => {
+    // נווט למסך שמציג רשימת קבצים עם אפשרויות עריכה/מחיקה
+    navigation.navigate('ManageFiles', { lessonId: lesson._id }); 
+  };
+
+  const handleManageTasks = () => {
+    // נווט למסך שמציג קבצים, ואז משימות עם אפשרויות עריכה/מחיקה
+    navigation.navigate('ManageTasks', { lessonId: lesson._id,classParams: classParams }); 
+  };
+
+  const handleAssignTasks = () => {
+    // מסך מורכב יותר, אולי נתחיל עם ניהול כללי
+    Alert.alert("בקרוב", "אפשרות לשיוך משימות למשתמשים תתווסף בהמשך");
+  };
+
+
+  return (
+    <ScrollView style={styles.container}> 
+      <Text style={styles.title}>ניהול שיעור: {lesson.title}</Text>
+      
+      <View style={styles.gridContainer}>
+
+        {/* --- הוספת קובץ --- */}
+        <TouchableOpacity 
+          style={[styles.card, styles.addCard]} 
+          onPress={handleAddFile}
+        >
+          <Text style={styles.cardIcon}>➕📄</Text>
+          <Text style={styles.cardText}>הוספת קובץ חדש</Text>
+        </TouchableOpacity>
+
+        {/* --- ניהול קבצים קיימים --- */}
+        <TouchableOpacity 
+          style={[styles.card, styles.editCard]} 
+          onPress={handleManageFiles}
+        >
+          <Text style={styles.cardIcon}>✏️📄</Text>
+          <Text style={styles.cardText}>עריכה/מחיקת קבצים</Text>
+        </TouchableOpacity>
+
+
+        {/* --- ניהול משימות --- */}
+        <TouchableOpacity 
+          style={[styles.card, styles.editCard]} 
+          onPress={handleManageTasks}
+        >
+          <Text style={styles.cardIcon}>✏️✅</Text>
+          <Text style={styles.cardText}>ניהול משימות</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={[styles.card, styles.statsCard]} // סטייל חדש
+          onPress={() => navigation.navigate('LessonStats', { 
+              lesson: lesson, 
+              classParams: classParams 
+          })}
+        >
+          <Text style={styles.cardIcon}>📊</Text>
+          <Text style={styles.cardText}>סטטיסטיקות שיעור</Text>
+        </TouchableOpacity>
+
+
+      </View>
+    </ScrollView>
+  );
+}
+
+// סטיילים דומים למסך ניהול כיתה
+const styles = StyleSheet.create({
+  container: { 
+    flex: 1, 
+    padding: 16,
+    backgroundColor: '#f4f7f6' 
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 24,
+    color: '#333'
+  },
+  gridContainer: {
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justifyContent: 'space-between', 
+  },
+  card: {
+    width: '48%', 
+    backgroundColor: '#ffffff', 
+    padding: 20,
+    borderRadius: 12, 
+    marginBottom: 16, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    minHeight: 150, 
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 3,
+  },
+  addCard: {
+    borderColor: '#4CAF50', 
+    borderWidth: 1,
+  },
+  editCard: {
+    borderColor: '#FFC107', 
+    borderWidth: 1,
+  },
+  assignCard: {
+    borderColor: '#17a2b8',
+    borderWidth: 1,
+  },
+  cardIcon: {
+    fontSize: 32,
+    marginBottom: 12,
+  },
+  cardText: {
+    fontSize: 16,
+    fontWeight: '600', 
+    color: '#333',
+    textAlign: 'center',
+  },
+});
+</file>
+
+<file path="screens/lesson/EditLessonScreen.js">
+// screens/EditLessonScreen.js
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import {  updateLesson } from '../../utils/api';
+import { useRoute } from '@react-navigation/native';
+
+export default function EditLessonScreen({  navigation ,route }) {
+ 
+  const { lessonId, title, description ,classId} = route.params;   
+  const [newTitle, setNewTitle] = useState(title);
+  const [desc, setDesc] = useState(description);
+  const handleUpdate = async () => {
+    if (!newTitle.trim()) {
+      Alert.alert('יש להזין שם כיתה');
+      return;
+    }
+    try {
+      await updateLesson(lessonId, { ClassId: classId, title: newTitle, description: desc });
+      navigation.goBack();
+    } catch (err) {
+      console.error('שגיאה בעדכון שיעור:', err.message);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>עריכת השיעור:</Text>
+      <TextInput
+        style={styles.input}
+        value={newTitle}
+        onChangeText={setNewTitle}
+        placeholder="שם השיעור"
+      />
+      <TextInput
+        style={styles.input}
+        value={desc}
+        onChangeText={setDesc}
+        placeholder="תיאור השיעור"
+      />
+      <Button title="שמור שינויים" onPress={handleUpdate} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, justifyContent: 'center' },
+  label: { fontSize: 18, marginBottom: 12 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 20,
+    fontSize: 16,
+  },
+});
+</file>
+
+<file path="screens/lesson/lessonPageScreen.js">
+import React, { useEffect, useState, useCallback } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Linking,
+  Alert,
+  Image,
+  Dimensions
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAllFiles, getTasks, updateTask, markTaskCompleted } from '../../utils/api';
+import YoutubeIframe from 'react-native-youtube-iframe';
+import Pdf from 'react-native-pdf';
+import { Audio } from 'expo-av'; // 1. ייבוא חדש
+
+const getFileIcon = (fileType) => {
+  switch (fileType) {
+    case 'image': return '🖼️';
+    case 'audio': return '🎵';
+    case 'pdf': return '📄';
+    case 'doc': return '📝';
+    default: return '📁';
+  }
+};
+
+function getYouTubeVideoId(url) {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+}
+
+
+export default function LessonPageScreen({ navigation, route }) {
+    const [filesWithTasks, setFilesWithTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [userId, setUserId] = useState(null);
+    const [isManager, setIsManager] = useState(false);
+    
+    // 2. State חדש לאודיו ושגיאות
+    const [sound, setSound] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [loadingAudio, setLoadingAudio] = useState(false);
+    const [failedFileIds, setFailedFileIds] = useState(new Set());
+
+    const { lesson, class: classParams } = route.params;
+
+    const setupScreen = useCallback(async () => {
+        try {
+            setLoading(true);
+            const userIdPromise = AsyncStorage.getItem('userId');
+            const filesPromise = getAllFiles(lesson._id);
+
+            const [currentUserId, filesResponse] = await Promise.all([userIdPromise, filesPromise]);
+            setUserId(currentUserId);
+
+            let isUserManager = false;
+            if (currentUserId) {
+                const managers = classParams.managers || [];
+                isUserManager = managers.includes(currentUserId);
+                setIsManager(isUserManager);
+            } else {
+                setIsManager(false);
+            }
+
+            const files = filesResponse.data;
+            const filesAndTasksPromises = files.map(async (file) => {
+                try {
+                    const tasksResponse = await getTasks(file._id);
+                    let tasks = tasksResponse.data;
+
+                    if (!isUserManager && currentUserId) {
+                        tasks = tasks.filter(task =>
+                            !task.assignedTo ||
+                            task.assignedTo.length === 0 ||
+                            task.assignedTo.includes(currentUserId)
+                        );
+                    }
+                    return { file, tasks };
+                } catch (taskError) {
+                    console.error(`Error loading tasks for file ${file._id}:`, taskError);
+                    return { file, tasks: [] };
+                }
+            });
+
+            const combinedData = await Promise.all(filesAndTasksPromises);
+            setFilesWithTasks(combinedData);
+
+        } catch (err) {
+            console.error('❌ Error loading lesson data:', err.message);
+            Alert.alert('שגיאה', 'לא ניתן לטעון את נתוני השיעור.');
+        } finally {
+            setLoading(false);
+        }
+    }, [lesson._id, classParams.managers]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', setupScreen);
+        setupScreen();
+        return unsubscribe;
+    }, [navigation, setupScreen]);
+
+    // 3. ניקוי נגן האודיו ביציאה מהמסך
+    useEffect(() => {
+        return sound
+            ? () => {
+                console.log('Unloading Sound');
+                sound.unloadAsync();
+            }
+            : undefined;
+    }, [sound]);
+
+
+    const handleOpenFile = async (url) => {
+        const supported = await Linking.canOpenURL(url);
+        if (supported) {
+            await Linking.openURL(url);
+        } else {
+            Alert.alert('שגיאה', `לא ניתן לפתוח את הקישור: ${url}`);
+        }
+    };
+
+    const handleToggleTaskCompletion = useCallback(async (task) => {
+        if (!userId) return;
+        const isCompleted = task.completedBy.includes(userId);
+
+        if (!isCompleted) {
+            try {
+                await markTaskCompleted(task._id);
+                let updatedCompletedBy = [...task.completedBy, userId];
+                setFilesWithTasks(currentData =>
+                    currentData.map(fileItem => ({
+                        ...fileItem,
+                        tasks: fileItem.tasks.map(t =>
+                            t._id === task._id ? { ...t, completedBy: updatedCompletedBy } : t
+                        )
+                    }))
+                );
+            } catch (error) {
+                console.error('שגיאה בסימון משימה:', error);
+                Alert.alert('שגיאה', 'לא ניתן היה לסמן את המשימה כבוצעה.');
+            }
+        } else {
+             Alert.alert("מידע", "ביטול סימון משימה עדיין לא נתמך.");
+        }
+    }, [userId]);
+    
+    // 4. פונקציית אודיו חדשה
+    const playAudio = async (url) => {
+        setLoadingAudio(true);
+        try {
+            if (isPlaying) {
+                await sound.pauseAsync();
+                setIsPlaying(false);
+            } else {
+                if (sound) {
+                    await sound.playAsync();
+                    setIsPlaying(true);
+                } else {
+                    const { sound: newSound } = await Audio.Sound.createAsync(
+                       { uri: url },
+                       { shouldPlay: true }
+                    );
+                    newSound.setOnPlaybackStatusUpdate((status) => {
+                        if (status.didJustFinish) {
+                            setIsPlaying(false);
+                        }
+                    });
+                    setSound(newSound);
+                    setIsPlaying(true);
+                }
+            }
+        } catch (e) {
+            console.log(`cannot play the sound file`, e);
+            Alert.alert('שגיאה', 'לא ניתן לנגן את קובץ השמע.');
+            setFailedFileIds(prev => new Set(prev).add(url)); // הוספת ID ייחודי (ה-URL)
+        } finally {
+            setLoadingAudio(false);
+        }
+    };
+    
+    const renderTaskItem = ({ item: task }) => { /* ... (ללא שינוי) ... */ };
+
+    // 5. פונקציית רינדור מעודכנת
+    const renderFileItem = ({ item }) => {
+        const file = item.file;
+        const tasksToShow = item.tasks || [];
+        const videoId = file.fileType === 'video' ? getYouTubeVideoId(file.fileUrl) : null;
+        const screenWidth = Dimensions.get('window').width;
+
+        const renderTasks = (headerText) => (
+            tasksToShow.length > 0 && (
+                <View style={styles.tasksList}>
+                    <Text style={styles.tasksHeader}>{headerText}</Text>
+                    <FlatList
+                        data={tasksToShow}
+                        keyExtractor={(task) => task._id}
+                        renderItem={renderTaskItem}
+                        scrollEnabled={false}
+                    />
+                </View>
+            )
+        );
+
+        const renderFallbackLink = () => (
+             <View style={styles.fileContainer}>
+                <TouchableOpacity style={styles.fileHeader} onPress={() => handleOpenFile(file.fileUrl)}>
+                    <Text style={styles.fileIcon}>{getFileIcon(file.fileType)}</Text>
+                    <View style={styles.fileInfo}>
+                        <Text style={styles.fileName}>{file.fileName}</Text>
+                        <Text style={styles.fileDescription}>הקובץ לא נטען. לחץ לפתיחה בדפדפן.</Text>
+                    </View>
+                    <Text style={styles.fileLinkIcon}>🔗</Text>
+                </TouchableOpacity>
+                {renderTasks('משימות לקובץ:')}
+            </View>
+        );
+
+        if (failedFileIds.has(file._id)) {
+            return renderFallbackLink();
+        }
+
+        if (videoId) {
+            return (
+                <View style={styles.fileContainer}>
+                    <Text style={styles.videoTitle}>{file.fileName}</Text>
+                    <YoutubeIframe
+                        height={230}
+                        videoId={videoId}
+                        onChangeState={event => console.log('Video State:', event)}
+                        onError={() => setFailedFileIds(prev => new Set(prev).add(file._id))}
+                        webViewStyle={{ opacity: 0.99 }}
+                    />
+                    {renderTasks('משימות לסרטון:')}
+                </View>
+            );
+        } else if (file.fileType === 'image') {
+            return (
+                <View style={styles.fileContainer}>
+                    <Text style={styles.fileTitle}>{file.fileName}</Text>
+                    <Image
+                      source={{ uri: file.fileUrl }}
+                      style={styles.imagePreview}
+                      resizeMode="contain"
+                      onError={() => setFailedFileIds(prev => new Set(prev).add(file._id))}
+                    />
+                    {renderTasks('משימות לתמונה:')}
+                </View>
+            );
+        } else if (file.fileType === 'pdf') {
+            const pdfSource = { uri: file.fileUrl, cache: true };
+            return (
+                <View style={styles.fileContainer}>
+                     <Text style={styles.fileTitle}>{file.fileName}</Text>
+                     <Pdf
+                        trustAllCerts={false}
+                        source={pdfSource}
+                        onLoadComplete={(numberOfPages,filePath) => {
+                            console.log(`מספר עמודים: ${numberOfPages}`);
+                        }}
+                        onError={() => setFailedFileIds(prev => new Set(prev).add(file._id))}
+                        style={[styles.pdfPreview, {width: screenWidth - 32 }]}
+                        />
+                     {renderTasks('משימות ל-PDF:')}
+                </View>
+            );
+        } else if (file.fileType === 'audio') {
+            return (
+                <View style={styles.fileContainer}>
+                    <View style={styles.fileHeader}>
+                        <Text style={styles.fileIcon}>{getFileIcon(file.fileType)}</Text>
+                        <View style={styles.fileInfo}>
+                            <Text style={styles.fileName}>{file.fileName}</Text>
+                            {file.description && <Text style={styles.fileDescription}>{file.description}</Text>}
+                        </View>
+                        <TouchableOpacity onPress={() => playAudio(file.fileUrl)} style={styles.playButton} disabled={loadingAudio}>
+                             <Text style={styles.playButtonText}>
+                                {loadingAudio ? 'טוען...' : (isPlaying ? '⏸️ השהה' : '▶️ נגן')}
+                             </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {renderTasks('משימות לקובץ שמע:')}
+                </View>
+            );
+        }
+        else {
+            return (
+                <View style={styles.fileContainer}>
+                    <TouchableOpacity style={styles.fileHeader} onPress={() => handleOpenFile(file.fileUrl)}>
+                        <Text style={styles.fileIcon}>{getFileIcon(file.fileType)}</Text>
+                        <View style={styles.fileInfo}>
+                            <Text style={styles.fileName}>{file.fileName}</Text>
+                            {file.description && <Text style={styles.fileDescription}>{file.description}</Text>}
+                        </View>
+                        <Text style={styles.fileLinkIcon}>🔗</Text>
+                    </TouchableOpacity>
+                    {renderTasks('משימות לקובץ:')}
+                </View>
+            );
+        }
+    };
+
+    if (loading) {
+        return <ActivityIndicator size="large" style={styles.loader} />
+    }
+
+    const filteredFilesToShow = filesWithTasks;
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>{lesson.title}</Text>
+            <Text style={styles.subtitle}>שיעור ב: {classParams.title}</Text>
+
+            {isManager && (
+              <TouchableOpacity
+                style={styles.adminButton}
+                onPress={() => navigation.navigate('AdminLesson', { lesson: lesson ,classParams: classParams})}
+              >
+                <Text style={styles.adminButtonText}>⚙️ ניהול שיעור</Text>
+              </TouchableOpacity>
+            )}
+
+            <FlatList
+                data={filteredFilesToShow}
+                keyExtractor={(item) => item.file._id}
+                renderItem={renderFileItem}
+                ListEmptyComponent={<Text style={styles.emptyText}>עדיין אין קבצים או משימות רלוונטיות לשיעור זה</Text>}
+                contentContainerStyle={{ paddingBottom: 20 }}
+            />
+        </View>
+    );
+}
+
+// 6. הסטיילים נשארים כמעט זהים (רק עדכון כפתור הנגינה)
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: '#f4f7f6'
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#333',
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#6c757d',
+        textAlign: 'center',
+        marginBottom: 16,
+    },
+    adminButton: {
+        backgroundColor: '#6c757d',
+        padding: 12,
+        borderRadius: 12,
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    adminButtonText: {
+        color: '#ffffff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    fileContainer: {
+        backgroundColor: '#ffffff',
+        borderRadius: 12,
+        marginBottom: 16,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+        overflow: 'hidden',
+    },
+    fileHeader: {
+        flexDirection: 'row-reverse',
+        alignItems: 'center',
+        padding: 16,
+        backgroundColor: '#e9ecef',
+    },
+    fileIcon: {
+        fontSize: 24,
+        marginRight: 12,
+    },
+    fileInfo: {
+        flex: 1,
+    },
+    fileName: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#333',
+        textAlign: 'right',
+    },
+    fileDescription: {
+        fontSize: 14,
+        color: '#6c757d',
+        textAlign: 'right',
+        marginTop: 2,
+    },
+    fileLinkIcon: {
+        fontSize: 18,
+        color: '#007bff',
+        marginLeft: 10,
+    },
+    fileTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#333',
+        textAlign: 'right',
+        paddingHorizontal: 16,
+        paddingTop: 16,
+        paddingBottom: 8,
+        backgroundColor: '#e9ecef',
+    },
+    videoTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#333',
+        textAlign: 'right',
+        paddingHorizontal: 16,
+        paddingTop: 16,
+        paddingBottom: 8,
+        backgroundColor: '#e9ecef',
+    },
+    imagePreview: {
+        width: '100%',
+        aspectRatio: 16/9,
+        backgroundColor: '#e0e0e0',
+    },
+    pdfPreview: {
+        height: 500,
+        backgroundColor: '#e0e0e0',
+        alignSelf: 'center',
+    },
+    playButton: {
+        backgroundColor: '#007bff',
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 6,
+        marginLeft: 10,
+        minWidth: 80, // רוחב מינימלי לכפתור
+        alignItems: 'center',
+    },
+    playButtonText: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    tasksList: {
+        padding: 16,
+        borderTopWidth: 1,
+        borderTopColor: '#e0e0e0',
+    },
+    tasksHeader: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#555',
+        marginBottom: 10,
+        textAlign: 'right',
+    },
+    taskItem: {
+        flexDirection: 'row-reverse',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+    },
+    taskTitle: {
+        fontSize: 16,
+        color: '#333',
+        flex: 1,
+        marginRight: 10,
+        textAlign: 'right',
+    },
+    taskCheckbox: {
+        width: 24,
+        height: 24,
+        borderRadius: 4,
+        borderWidth: 2,
+        borderColor: '#007bff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 10,
+    },
+    taskCheckboxCompleted: {
+        backgroundColor: '#007bff',
+    },
+    taskCheckmark: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+    },
+    emptyText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#888',
+        marginTop: 40
+    }
+});
+</file>
+
+<file path="screens/lesson/LessonScreen.js">
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
+import {
+  getLessonsForClass,
+  deleteLesson, 
+} from '../../utils/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export default function LessonScreen({ navigation, route }) {
+  const [lessons, setLessons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isManager, setIsManager] = useState(false);
+  const { class: classParams } = route.params;
+  
+  useEffect(() => {
+    const setupScreen = async () => {
+      try {
+        setLoading(true); 
+        
+        const lessonsPromise = getLessonsForClass(classParams._id);
+        const managerCheckPromise = checkManagerStatus();
+        
+        const [lessonsResponse] = await Promise.all([lessonsPromise, managerCheckPromise]);
+        
+        setLessons(lessonsResponse.data);
+
+      } catch (err) {
+        console.error('❌ שגיאה בטעינת שיעורים:', err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const checkManagerStatus = async () => {
+      try {
+        const currentUserId = await AsyncStorage.getItem('userId'); 
+        
+        if (currentUserId) {
+          const managers = classParams.managers || [];
+          const isManaging = managers.includes(currentUserId);
+          setIsManager(isManaging);
+        } else {
+          setIsManager(false);
+        }
+      } catch (e) {
+        console.error("שגיאה בבדיקת הרשאת מנהל:", e);
+        setIsManager(false);
+      }
+    };
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      setupScreen();
+    });
+
+    setupScreen();
+
+    return unsubscribe;
+  }, [navigation, classParams]);
+
+  const handleDeleteLesson = async (lessonId) => {
+    Alert.alert('מחיקת שיעור', 'האם אתה בטוח שברצונך למחוק את השיעור?', [
+      { text: 'ביטול', style: 'cancel' },
+      {
+        text: 'מחק',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await deleteLesson(lessonId);
+            setLessons((prev) => prev.filter((lesson) => lesson._id !== lessonId));
+          } catch (err) {
+            console.error('❌ שגיאה במחיקה:', err.message);
+          }
+        },
+      },
+    ]);
+  };
+
+  const renderLessonItem = ({ item }) => (
+    <View style={styles.card}>
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        onPress={() =>
+          navigation.navigate('LessonPage', {
+            lesson: item,
+            class: classParams,
+          })
+        }>
+        <Text style={styles.cardText}>{item.title}</Text>
+        {item.description && (
+          <Text style={styles.cardDescription}>{item.description}</Text>
+        )}
+      </TouchableOpacity>
+      
+      {isManager && (
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() =>
+              navigation.navigate('EditLesson', {
+                lessonId: item._id,
+                title: item.title,
+                description: item.description,
+                ClassId: classParams._id,
+              })
+            }>
+            <Text style={styles.iconText}>✏️</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.iconButton} 
+            onPress={() => handleDeleteLesson(item._id)}
+          >
+            <Text style={styles.iconText}>🗑️</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
+  );
+
+  if (loading) return <ActivityIndicator size="large" style={styles.loader} />;
+
+  const filteredLessons = lessons.filter((lesson) =>
+    lesson.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>שיעורים ב: {classParams.title}</Text>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="חיפוש שיעור..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
+            
+      <FlatList
+        data={filteredLessons}
+        keyExtractor={(item) => item._id}
+        renderItem={renderLessonItem}
+        ListEmptyComponent={<Text style={styles.emptyListText}>עדיין אין שיעורים בכיתה זו</Text>}
+        style={{ marginTop: 16 }}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f4f7f6',
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#333',
+  },
+  searchInput: {
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    fontSize: 16,
+    marginBottom: 16,
+    textAlign: 'right',
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    marginBottom: 12,
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 3,
+    borderRightWidth: 4,
+    borderRightColor: '#28a745',
+  },
+  cardText: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#333',
+    textAlign: 'right',
+  },
+  cardDescription: {
+    fontSize: 14,
+    color: '#6c757d',
+    textAlign: 'right',
+    marginTop: 4,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    marginLeft: 10,
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#f0f0f0',
+  },
+  iconText: {
+    fontSize: 18,
+  },
+  emptyListText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#888',
+    marginTop: 20,
+    marginBottom: 20,
+  }
+});
+</file>
+
+<file path="screens/lesson/LessonStatsScreen.js">
+import React, { useEffect, useState, useCallback } from 'react';
+import { 
+  View, 
+  Text, 
+  FlatList, 
+  StyleSheet, 
+  ActivityIndicator, 
+  ScrollView 
+} from 'react-native';
+// נצטרך פחות פונקציות API הפעם
+import { getUsers, getAllFiles, getTasks } from '../../utils/api'; 
+
+export default function LessonStatsScreen({ navigation, route }) { 
+    // קבלת פרטי השיעור והכיתה
+    const { lesson, classParams } = route.params; 
+    
+    const [students, setStudents] = useState([]); 
+    const [tasksData, setTasksData] = useState([]); 
+    const [loading, setLoading] = useState(true); 
+
+    const fetchLessonData = useCallback(async () => {
+        try {
+            setLoading(true);
+            const memberIds = classParams.members || [];
+            
+            // 1. קבלת פרטי התלמידים בכיתה
+            const usersResponse = await getUsers();
+            const allUsers = usersResponse.data;
+            const classStudents = allUsers.filter(user => memberIds.includes(user._id));
+            setStudents(classStudents);
+
+            // 2. קבלת כל הקבצים *רק* מהשיעור הנוכחי
+            const filesResponse = await getAllFiles(lesson._id); 
+            const lessonFiles = filesResponse.data;
+
+            // 3. קבלת כל המשימות *רק* מהקבצים של השיעור
+            const tasksPromises = lessonFiles.map(file => getTasks(file._id));
+            const tasksResponses = await Promise.all(tasksPromises);
+            const lessonTasks = tasksResponses.flatMap(res => res.data); 
+            
+            setTasksData(lessonTasks); // שמירת המשימות של השיעור
+
+        } catch (err) {
+            console.error('❌ שגיאה בטעינת נתוני סטטיסטיקת שיעור:', err.message);
+        } finally {
+            setLoading(false);
+        }
+    }, [lesson._id, classParams.members]);
+
+    useEffect(() => {
+        fetchLessonData();
+    }, [fetchLessonData]);
+
+    const renderTaskStatItem = (task, studentId) => {
+        const isCompleted = task.completedBy?.includes(studentId);
+        return (
+            <View key={task._id} style={styles.taskItem}>
+                <Text style={styles.taskTitle}>{task.title}</Text>
+                <Text style={[styles.taskStatus, isCompleted ? styles.completed : styles.notCompleted]}>
+                    {isCompleted ? '✓ בוצע' : '✗ לא בוצע'}
+                </Text>
+            </View>
+        );
+    };
+
+    const renderStudentStats = ({ item: student }) => {
+        // סינון המשימות הרלוונטיות לתלמיד זה (מתוך המשימות של השיעור)
+        const relevantTasks = tasksData.filter(task => 
+            !task.assignedTo || 
+            task.assignedTo.length === 0 || 
+            task.assignedTo.includes(student._id)
+        );
+
+        const completedTasksCount = relevantTasks.filter(task => 
+            task.completedBy?.includes(student._id)
+        ).length;
+
+        const totalRelevantTasks = relevantTasks.length;
+        const completionPercentage = totalRelevantTasks > 0 
+            ? Math.round((completedTasksCount / totalRelevantTasks) * 100) 
+            : 0; 
+
+        return (
+            <View style={styles.studentCard}>
+                <View style={styles.studentHeader}>
+                    <Text style={styles.studentName}>{student.userName || student.name}</Text>
+                    <Text style={styles.percentageText}>
+                        {completionPercentage}% ({completedTasksCount}/{totalRelevantTasks})
+                    </Text>
+                </View>
+                {totalRelevantTasks > 0 ? (
+                    // הצג רק את המשימות הרלוונטיות לתלמיד
+                    relevantTasks.map(task => renderTaskStatItem(task, student._id)) 
+                ) : (
+                    <Text style={styles.noTasksText}>אין משימות משויכות לתלמיד זה בשיעור</Text>
+                )}
+            </View>
+        );
+    };
+
+
+    if (loading) {
+        return <ActivityIndicator size="large" style={styles.loader} />
+    }
+
+    return (
+        <ScrollView style={styles.container}>
+            {/* כותרת מותאמת לשיעור */}
+            <Text style={styles.title}>סטטיסטיקות שיעור: {lesson.title}</Text> 
+            <Text style={styles.subtitle}>כיתה: {classParams.title}</Text> 
+            
+            {students.length > 0 ? (
+                <FlatList
+                    data={students}
+                    renderItem={renderStudentStats}
+                    keyExtractor={(student) => student._id}
+                    scrollEnabled={false} 
+                />
+            ) : (
+                <Text style={styles.emptyText}>אין תלמידים בכיתה להצגת סטטיסטיקה</Text>
+            )}
+        </ScrollView>
+    );
+}
+
+// סטיילים (זהים ל-ClassStatsScreen, הוספתי רק subtitle)
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: '#f4f7f6'
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#333'
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#6c757d',
+        textAlign: 'center',
+        marginBottom: 24,
+    },
+    studentCard: {
+        backgroundColor: '#ffffff',
+        borderRadius: 12,
+        marginBottom: 16,
+        padding: 16,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    studentHeader: {
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+        paddingBottom: 6,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    studentName: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#007AFF' 
+    },
+    percentageText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333'
+    },
+    taskItem: {
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+    },
+    taskTitle: {
+        fontSize: 15,
+        color: '#333',
+        flex: 1, 
+        marginRight: 8,
+        textAlign: 'right',
+    },
+    taskStatus: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginLeft: 8,
+    },
+    completed: {
+        color: '#28a745', 
+    },
+    notCompleted: {
+        color: '#dc3545', 
+    },
+    noTasksText: {
+        fontSize: 14,
+        color: '#888',
+        textAlign: 'center',
+        paddingVertical: 10,
+    },
+    emptyText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#888',
+        marginTop: 40
+    }
+});
+</file>
+
+<file path="screens/task/AddTaskScreen.js">
+import React, { useState, useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  TouchableOpacity, 
+  StyleSheet, 
+  Alert, 
+  ActivityIndicator,
+  FlatList, // 1. ייבוא FlatList
+  ScrollView 
+} from 'react-native';
+// 2. ייבוא getUsers
+import { createTask, getUsers } from '../../utils/api'; 
+
+export default function AddTaskScreen({ navigation, route }) {
+  const { fileId, classParams } = route.params; // 3. קבלת classParams
+  const [title, setTitle] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [usersInClass, setUsersInClass] = useState([]); // 4. State למשתמשי הכיתה
+  const [selectedUserIds, setSelectedUserIds] = useState([]); // 5. State למשתמשים שנבחרו
+  const [usersLoading, setUsersLoading] = useState(true); // State לטעינת משתמשים
+
+  // 6. useEffect לטעינת משתמשי הכיתה
+  useEffect(() => {
+    const fetchClassUsers = async () => {
+      try {
+        const memberIds = classParams.members || [];
+        if (memberIds.length === 0) {
+          setUsersInClass([]);
+          setUsersLoading(false);
+          return;
+        }
+        
+        const response = await getUsers();
+        const allUsers = response.data;
+        const filteredUsers = allUsers.filter(user => memberIds.includes(user._id));
+        setUsersInClass(filteredUsers);
+      } catch (error) {
+        console.error("שגיאה בטעינת משתמשי כיתה:", error);
+      } finally {
+        setUsersLoading(false);
+      }
+    };
+    fetchClassUsers();
+  }, [classParams.members]);
+
+  const handleAddTask = async () => {
+    if (!title.trim()) {
+      Alert.alert('שגיאה', 'יש למלא את שם המשימה.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const taskData = {
+        fileId,
+        title,
+        assignedTo: selectedUserIds, // 7. הוספת המשתמשים שנבחרו
+      };
+      await createTask(taskData);
+      Alert.alert('הצלחה', 'המשימה נוספה בהצלחה!');
+      navigation.goBack(); 
+    } catch (error) {
+      console.error('שגיאה בהוספת משימה:', error);
+      Alert.alert('שגיאה', 'לא ניתן היה להוסיף את המשימה.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 8. פונקציה לבחירת משתמש
+  const toggleUserSelection = (userId) => {
+    setSelectedUserIds((prev) => 
+      prev.includes(userId) 
+        ? prev.filter(id => id !== userId) 
+        : [...prev, userId]
+    );
+  };
+
+  // 9. פונקציית רינדור למשתמש ברשימה
+  const renderUserItem = ({ item }) => {
+    const isSelected = selectedUserIds.includes(item._id);
+    return (
+      <TouchableOpacity 
+        style={[styles.userItem, isSelected && styles.userSelected]} 
+        onPress={() => toggleUserSelection(item._id)}
+      >
+        <Text style={styles.userText}>{item.userName || item.name}</Text>
+        {isSelected && <Text style={styles.checkmark}>✓</Text>}
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>הוספת משימה חדשה</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="שם המשימה *"
+        value={title}
+        onChangeText={setTitle}
+      />
+
+      {/* 10. הצגת רשימת המשתמשים */}
+      <Text style={styles.label}>שייך למשתמשים (אופציונלי):</Text>
+      {usersLoading ? (
+          <ActivityIndicator />
+      ) : usersInClass.length > 0 ? (
+          <FlatList
+              data={usersInClass}
+              renderItem={renderUserItem}
+              keyExtractor={(item) => item._id}
+              style={styles.userList}
+              scrollEnabled={false} // למנוע גלילה כפולה
+          />
+      ) : (
+          <Text style={styles.noUsersText}>אין משתמשים בכיתה לשיוך.</Text>
+      )}
+     
+      {loading ? (
+        <ActivityIndicator size="large" style={styles.loader}/>
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={handleAddTask}>
+            <Text style={styles.buttonText}>הוסף משימה</Text>
+        </TouchableOpacity>
+      )}
+    </ScrollView>
+  );
+}
+
+// 11. עדכון הסטיילים
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, backgroundColor: '#f4f7f6' },
+  title: { fontSize: 26, fontWeight: 'bold', textAlign: 'center', marginBottom: 24, color: '#333' },
+  input: { backgroundColor: '#ffffff', paddingHorizontal: 16, paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: '#e0e0e0', fontSize: 16, marginBottom: 20, textAlign: 'right' },
+  label: { fontSize: 16, color: '#555', marginBottom: 8, textAlign: 'right'},
+  userList: { 
+      marginBottom: 20, 
+      maxHeight: 200, // הגבלת גובה הרשימה
+      borderColor: '#e0e0e0',
+      borderWidth: 1,
+      borderRadius: 12,
+      backgroundColor: '#ffffff',
+  },
+  userItem: { 
+      flexDirection: 'row-reverse', 
+      justifyContent: 'space-between', 
+      alignItems: 'center',
+      padding: 12, 
+      borderBottomWidth: 1, 
+      borderBottomColor: '#f0f0f0' 
+  },
+  userSelected: { 
+      backgroundColor: '#d3e5ff' 
+  },
+  userText: { 
+      fontSize: 16 
+  },
+  checkmark: {
+      fontSize: 16,
+      color: '#007AFF',
+      fontWeight: 'bold',
+  },
+  noUsersText: {
+      fontSize: 14,
+      color: '#888',
+      textAlign: 'center',
+      marginBottom: 20,
+  },
+  button: { backgroundColor: '#007AFF', padding: 14, borderRadius: 12, alignItems: 'center', marginTop: 10 },
+  buttonText: { color: '#ffffff', fontSize: 16, fontWeight: 'bold' },
+  loader: { marginTop: 20 }
+});
+</file>
+
+<file path="screens/task/EditTaskScreen.js">
+import React, { useState, useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  TouchableOpacity, 
+  StyleSheet, 
+  Alert, 
+  ActivityIndicator,
+  FlatList, // 1. ייבוא
+  ScrollView 
+} from 'react-native';
+// 2. ייבוא getUsers
+import { updateTask, getUsers } from '../../utils/api'; 
+
+export default function EditTaskScreen({ navigation, route }) {
+  const { task, classParams } = route.params; // 3. קבלת classParams
+  const [title, setTitle] = useState(task.title);
+  const [loading, setLoading] = useState(false);
+  const [usersInClass, setUsersInClass] = useState([]); // 4. משתמשי כיתה
+  // 5. אתחול עם המשתמשים המשויכים כרגע
+  const [selectedUserIds, setSelectedUserIds] = useState(task.assignedTo || []); 
+  const [usersLoading, setUsersLoading] = useState(true);
+
+  // 6. useEffect לטעינת משתמשים
+  useEffect(() => {
+    const fetchClassUsers = async () => {
+      try {
+        const memberIds = classParams.members || [];
+        if (memberIds.length === 0) {
+          setUsersInClass([]);
+          setUsersLoading(false);
+          return;
+        }
+        const response = await getUsers();
+        const allUsers = response.data;
+        const filteredUsers = allUsers.filter(user => memberIds.includes(user._id));
+        setUsersInClass(filteredUsers);
+      } catch (error) {
+        console.error("שגיאה בטעינת משתמשי כיתה:", error);
+      } finally {
+        setUsersLoading(false);
+      }
+    };
+    fetchClassUsers();
+  }, [classParams.members]);
+
+  const handleUpdateTask = async () => {
+    if (!title.trim()) {
+      Alert.alert('שגיאה', 'יש למלא את שם המשימה.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const updatedData = { 
+          // לא נשנה את fileId, completedBy וכו' מכאן
+          title: title, 
+          assignedTo: selectedUserIds // 7. עדכון השיוך
+      }; 
+      
+      await updateTask(task._id, updatedData); 
+      Alert.alert('הצלחה', 'המשימה עודכנה בהצלחה!');
+      navigation.goBack(); 
+    } catch (error) {
+      console.error('שגיאה בעדכון משימה:', error);
+      Alert.alert('שגיאה', 'לא ניתן היה לעדכן את המשימה.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 8. פונקציית בחירה (זהה לקודם)
+  const toggleUserSelection = (userId) => {
+    setSelectedUserIds((prev) => 
+      prev.includes(userId) 
+        ? prev.filter(id => id !== userId) 
+        : [...prev, userId]
+    );
+  };
+
+  // 9. פונקציית רינדור למשתמש (זהה לקודם)
+  const renderUserItem = ({ item }) => {
+    const isSelected = selectedUserIds.includes(item._id);
+    return (
+      <TouchableOpacity 
+        style={[styles.userItem, isSelected && styles.userSelected]} 
+        onPress={() => toggleUserSelection(item._id)}
+      >
+        <Text style={styles.userText}>{item.userName || item.name}</Text>
+        {isSelected && <Text style={styles.checkmark}>✓</Text>}
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>עריכת משימה</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="שם המשימה *"
+        value={title}
+        onChangeText={setTitle}
+      />
+
+      {/* 10. הצגת רשימת המשתמשים */}
+      <Text style={styles.label}>שייך למשתמשים:</Text>
+      {usersLoading ? (
+          <ActivityIndicator />
+      ) : usersInClass.length > 0 ? (
+          <FlatList
+              data={usersInClass}
+              renderItem={renderUserItem}
+              keyExtractor={(item) => item._id}
+              style={styles.userList}
+              scrollEnabled={false}
+          />
+      ) : (
+          <Text style={styles.noUsersText}>אין משתמשים בכיתה לשיוך.</Text>
+      )}
+     
+      {loading ? (
+        <ActivityIndicator size="large" style={styles.loader}/>
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={handleUpdateTask}>
+            <Text style={styles.buttonText}>שמור שינויים</Text>
+        </TouchableOpacity>
+      )}
+    </ScrollView>
+  );
+}
+
+// 11. הסטיילים זהים ל-AddTaskScreen
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, backgroundColor: '#f4f7f6' },
+  title: { fontSize: 26, fontWeight: 'bold', textAlign: 'center', marginBottom: 24, color: '#333' },
+  input: { backgroundColor: '#ffffff', paddingHorizontal: 16, paddingVertical: 12, borderRadius: 12, borderWidth: 1, borderColor: '#e0e0e0', fontSize: 16, marginBottom: 20, textAlign: 'right' },
+  label: { fontSize: 16, color: '#555', marginBottom: 8, textAlign: 'right'},
+  userList: { marginBottom: 20, maxHeight: 200, borderColor: '#e0e0e0', borderWidth: 1, borderRadius: 12, backgroundColor: '#ffffff'},
+  userItem: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', padding: 12, borderBottomWidth: 1, borderBottomColor: '#f0f0f0' },
+  userSelected: { backgroundColor: '#d3e5ff' },
+  userText: { fontSize: 16 },
+  checkmark: { fontSize: 16, color: '#007AFF', fontWeight: 'bold' },
+  noUsersText: { fontSize: 14, color: '#888', textAlign: 'center', marginBottom: 20 },
+  button: { backgroundColor: '#007AFF', padding: 14, borderRadius: 12, alignItems: 'center', marginTop: 10 },
+  buttonText: { color: '#ffffff', fontSize: 16, fontWeight: 'bold' },
+  loader: { marginTop: 20 }
+});
+</file>
+
+<file path="screens/task/ManageTasksScreen.js">
+import React, { useEffect, useState, useCallback } from 'react';
+import { 
+  View, 
+  Text, 
+  FlatList, 
+  TouchableOpacity, 
+  StyleSheet, 
+  ActivityIndicator, 
+  Alert,
+  ScrollView // שימוש ב-ScrollView כדי לאפשר גלילה של כל התוכן
+} from 'react-native';
+import { getAllFiles, getTasks, deleteTask } from '../../utils/api'; 
+
+// פונקציית אייקון קובץ (כמו קודם)
+const getFileIcon = (fileType) => {
+  switch (fileType) {
+    case 'image': return '🖼️';
+    case 'video': return '▶️';
+    case 'audio': return '🎵';
+    case 'pdf': return '📄';
+    case 'doc': return '📝';
+    default: return '📁';
+  }
+};
+
+export default function ManageTasksScreen({ navigation, route }) {
+  const { lessonId ,classParams} = route.params;
+  const [filesWithTasks, setFilesWithTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const filesResponse = await getAllFiles(lessonId);
+      const files = filesResponse.data;
+      
+      const filesAndTasksPromises = files.map(async (file) => {
+        try {
+          const tasksResponse = await getTasks(file._id);
+          return { file, tasks: tasksResponse.data };
+        } catch (taskError) {
+          console.error(`שגיאה בטעינת משימות עבור קובץ ${file._id}:`, taskError);
+          return { file, tasks: [] };
+        }
+      });
+      
+      const combinedData = await Promise.all(filesAndTasksPromises);
+      setFilesWithTasks(combinedData);
+
+    } catch (err) {
+      console.error('❌ שגיאה בטעינת נתונים:', err.message);
+      Alert.alert('שגיאה', 'לא ניתן לטעון את נתוני השיעור.');
+    } finally {
+      setLoading(false);
+    }
+  }, [lessonId]);
+
+  useEffect(() => {
+    // טעינה ראשונית ורענון בעת חזרה למסך
+    const unsubscribe = navigation.addListener('focus', fetchData);
+    fetchData();
+    return unsubscribe;
+  }, [navigation, fetchData]);
+
+  const handleDeleteTask = (task) => {
+    Alert.alert(
+      "מחיקת משימה",
+      `האם למחוק את המשימה "${task.title}"?`,
+      [
+        { text: "ביטול", style: "cancel" },
+        { 
+          text: "מחק", 
+          style: "destructive", 
+          onPress: async () => {
+            try {
+              await deleteTask(task._id);
+              // רענון הנתונים מהשרת לאחר מחיקה
+              fetchData(); 
+            } catch (error) {
+              console.error("שגיאה במחיקת משימה:", error);
+              Alert.alert("שגיאה", "לא ניתן היה למחוק את המשימה.");
+            }
+          } 
+        }
+      ]
+    );
+  };
+
+  // פונקציית רינדור למשימה עם כפתורי ניהול
+  const renderTaskItem = (task, fileId) => (
+    <View key={task._id} style={styles.taskItem}>
+       <Text style={styles.taskTitle}>{task.title}</Text>
+       <View style={styles.actionButtons}>
+          <TouchableOpacity 
+             style={styles.iconButton}
+             onPress={() => navigation.navigate('EditTask', { task: task, classParams: classParams })}
+          >
+             <Text style={styles.iconText}>✏️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+             style={[styles.iconButton, styles.deleteButton]}
+             onPress={() => handleDeleteTask(task)}
+          >
+             <Text style={styles.iconText}>🗑️</Text>
+          </TouchableOpacity>
+       </View>
+    </View>
+  );
+
+  // פונקציית רינדור לקובץ + המשימות שלו + כפתור הוספת משימה
+  const renderFileSection = (item) => (
+    <View style={styles.fileSectionCard} key={item.file._id}>
+        <View style={styles.fileHeader}>
+            <Text style={styles.fileIcon}>{getFileIcon(item.file.fileType)}</Text>
+            <Text style={styles.fileName}>{item.file.fileName}</Text>
+        </View>
+
+        {item.tasks.length > 0 ? (
+            item.tasks.map(task => renderTaskItem(task, item.file._id))
+        ) : (
+            <Text style={styles.noTasksText}>אין משימות לקובץ זה</Text>
+        )}
+        
+        {/* כפתור הוספת משימה לקובץ זה */}
+        <TouchableOpacity
+          style={styles.addTaskButton}
+          onPress={() => navigation.navigate('AddTask', { fileId: item.file._id, classParams: classParams })}
+        >
+          <Text style={styles.addTaskButtonText}>➕ הוסף משימה לקובץ זה</Text>
+        </TouchableOpacity>
+    </View>
+  );
+
+  if (loading) return <ActivityIndicator size="large" style={styles.loader} />;
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>ניהול משימות</Text>
+      
+      {filesWithTasks.length > 0 ? (
+          filesWithTasks.map(renderFileSection)
+      ) : (
+          <Text style={styles.emptyText}>אין קבצים בשיעור זה להוספת משימות</Text>
+      )}
+    </ScrollView>
+  );
+}
+
+// סטיילים מותאמים
+const styles = StyleSheet.create({
+    container: { flex: 1, padding: 16, backgroundColor: '#f4f7f6' },
+    title: { fontSize: 26, fontWeight: 'bold', textAlign: 'center', marginBottom: 24, color: '#333' },
+    loader: { flex: 1, justifyContent: 'center' },
+    fileSectionCard: { backgroundColor: '#ffffff', borderRadius: 12, marginBottom: 16, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 2, overflow: 'hidden' },
+    fileHeader: { flexDirection: 'row-reverse', alignItems: 'center', padding: 16, backgroundColor: '#e9ecef' },
+    fileIcon: { fontSize: 20, marginRight: 10 },
+    fileName: { fontSize: 17, fontWeight: '600', color: '#333', textAlign: 'right' },
+    noTasksText: { fontSize: 15, color: '#888', textAlign: 'center', padding: 16 },
+    taskItem: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10, paddingHorizontal: 16, borderTopWidth: 1, borderTopColor: '#f0f0f0' },
+    taskTitle: { fontSize: 16, color: '#333', flex: 1, marginRight: 10, textAlign: 'right' },
+    actionButtons: { flexDirection: 'row', gap: 10, marginLeft: 10 },
+    iconButton: { padding: 8, borderRadius: 20, backgroundColor: '#f0f0f0' },
+    deleteButton: { backgroundColor: '#ffebee' },
+    iconText: { fontSize: 18 },
+    addTaskButton: { backgroundColor: '#e7f3ff', padding: 12, alignItems: 'center', borderTopWidth: 1, borderTopColor: '#d0e0ff' },
+    addTaskButtonText: { color: '#0056b3', fontSize: 15, fontWeight: 'bold' },
+    emptyText: { textAlign: 'center', fontSize: 16, color: '#888', marginTop: 40 },
+});
+</file>
+
+<file path="screens/user/LoginScreen.js">
+import React, { useState } from 'react';
+import {
+  View,
+  TextInput,
+  Button,
+  Text,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import { login } from '../../utils/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export default function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('נא להזין כתובת אימייל וסיסמה');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await login(email, password);
+      Alert.alert('התחברת בהצלחה!');
+      const { token, user } = res.data;
+      await AsyncStorage.setItem('authToken', token);
+      await AsyncStorage.setItem('userId', user._id);
+      navigation.replace('Classes');
+      
+    } catch (err) {
+      Alert.alert('שגיאה בהתחברות', 'פרטי התחברות שגויים');
+      
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>התחברות</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="כתובת אימייל"
+        autoCapitalize="none"
+        keyboardType="email-address"
+        value={email}
+        onChangeText={setEmail}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="סיסמה (לפחות 8 תווים)"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+
+      {loading ? (
+        <ActivityIndicator size="large" />
+      ) : (
+        <Button title="התחבר" onPress={handleLogin} />
+      )}
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Register')}
+        style={styles.linkContainer}
+      >
+        <Text style={styles.linkText}>אין לך חשבון? הירשם כאן</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', padding: 20 },
+  title: { fontSize: 24, textAlign: 'center', marginBottom: 24 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    fontSize: 16,
+  },
+  linkContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  linkText: {
+    color: '#007aff',
+    fontSize: 16,
+  },
+});
+</file>
+
+<file path="screens/user/RegisterScreen.js">
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import { register } from '../../utils/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export default function RegisterScreen({ navigation }) {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [loading, setLoading] = useState(false);
+  const userData = {
+        firstName,
+        lastName,
+        email,
+        password,
+        userName,
+        phoneNumber
+      };
+  
+  const handleRegister = async () => {
+    if (!firstName || !lastName || !email || !password || !userName || !phoneNumber) {
+      Alert.alert('נא למלא את כל השדות');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      
+      
+      const res = await register(userData);
+      const { user } = res.data;
+
+      Alert.alert('נרשמת בהצלחה!', 'אנא התחבר כעת');
+      navigation.replace('Login');
+    } catch (err) {
+      Alert.alert('שגיאה ברישום', err.message );
+      console.log(userData)
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>רישום משתמש חדש</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="שם פרטי"
+        value={firstName}
+        onChangeText={setFirstName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="שם משפחה"
+        value={lastName}
+        onChangeText={setLastName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="אימייל"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+      />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="שם משתמש"
+        value={userName}
+        onChangeText={setUserName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="מספר טלפון"
+        value={phoneNumber}
+        onChangeText={setPhoneNumber}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="סיסמה"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+
+      {loading ? (
+        <ActivityIndicator size="large" />
+      ) : (
+        <Button title="רישום" onPress={handleRegister} />
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, justifyContent: 'center' },
+  title: { fontSize: 24, textAlign: 'center', marginBottom: 20 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#cccccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+    fontSize: 16,
+  },
+  label: { fontSize: 16, marginTop: 12 },
+  picker: {
+    borderWidth: 1,
+    borderColor: '#cccccc',
+    marginBottom: 20,
+  },
+});
+</file>
+
+<file path="utils/api.js">
+import axios from 'axios';
+import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// 🛠️ קבלת כתובת השרת מתוך app.config.js
+const SERVER_URL = Constants.expoConfig?.extra?.SERVER_URL;
+
+const api = axios.create({
+  baseURL: 'https://private-lessones-2dbg.onrender.com' 
+});
+
+// 🔐 מוסיף את הטוקן אוטומטית לכל בקשה
+api.interceptors.request.use(async (config) => {
+  const token = await AsyncStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+
+
+// ----- user -----
+export const getUsers = () => api.get('/users');
+export const login = (email, password) =>
+  api.post('/users/login', { email, password });
+
+export const register = (userData) =>
+  api.post('/users/register', userData);
+// ----- Classes -----
+export const getClassesForUser = () => 
+  api.get('/classes/my');
+export const getClassesForManager = () => 
+  api.get('/classes/managed');
+export const createClass = (data) => 
+  api.post('/classes', data);
+export const deleteClass = (classId) => 
+  api.delete(`/classes/${classId}`);
+export const updateClass = (classId, data) => 
+  api.put(`/classes/${classId}`, data);
+export const addUserToClass = (classId, userId) => 
+  api.put(`/classes/${classId}/assign-user`, { userId });
+export const removeUserFromClass = (classId, userId) =>
+  api.put(`/classes/${classId}/remove-user`, { userId });
+export const addManagerToClass = (classId, managerId) =>
+  api.put(`/classes/${classId}/add-manager`, { userId: managerId });
+export const removeManagerFromClass = (classId, managerId) => {
+  return api.put(`/classes/${classId}/remove-manager`, { userId: managerId });
+};
+
+// ----- Lessons -----
+export const getLessonsForClass = (classId) =>
+  api.get(`/lessons/by-class/${classId}`);
+export const createLesson = (data) =>
+  api.post('/lessons', data);
+export const updateLesson = (lessonId, data) =>
+  api.put(`/lessons/${lessonId}`, data);
+export const deleteLesson = (lessonId) =>
+  api.delete(`/lessons/${lessonId}`);
+
+// ----- files -----
+export const getAllFiles=(lessonId)=> api.get(`/files/lesson/${lessonId}`);
+export const uploadFile=(data)=> api.post('/files',data);
+export const deleteFile=(fileId)=> api.delete(`/files/${fileId}`);
+export const updateFile=(fileId,data)=> api.put(`/files/${fileId}`,data);
+
+// ----- tasks -----
+export const getTasks = (fileId) => api.get(`/tasks/file/${fileId}`);
+export const createTask = (data) => api.post('/tasks', data);
+export const updateTask = (taskId, data) => api.put(`/tasks/${taskId}`, data);
+export const deleteTask = (taskId) => api.delete(`/tasks/${taskId}`);
+export const markTaskCompleted = (taskId) =>  api.patch(`/tasks/${taskId}/complete`);
+</file>
+
+</files>

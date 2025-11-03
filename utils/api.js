@@ -47,6 +47,7 @@ export const addManagerToClass = (classId, managerId) =>
 export const removeManagerFromClass = (classId, managerId) => {
   return api.put(`/classes/${classId}/remove-manager`, { userId: managerId });
 };
+export const getPublicClasses = () => api.get('/classes/public');
 
 // ----- Lessons -----
 export const getLessonsForClass = (classId) =>

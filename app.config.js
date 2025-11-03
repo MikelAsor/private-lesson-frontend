@@ -1,5 +1,9 @@
 export default {
   expo: {
+  "plugins": [
+    "expo-audio",
+    "expo-video"
+  ],
     name: "TaskMate",
     slug: "taskmate",
     version: "1.0.0",

@@ -1,3 +1,4 @@
+// screens/class/ClassScreen.js
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -7,35 +8,66 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  ScrollView, 
+  Alert,
 } from 'react-native';
 import {
   getClassesForUser,
   getClassesForManager,
+  getPublicClasses,   
+  addUserToClass,     
 } from '../../utils/api';
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 export default function ClassScreen({ navigation, route }) {
   const [allClasses, setAllClasses] = useState([]);
+  const [publicClasses, setPublicClasses] = useState([]); 
   const [managedClassIds, setManagedClassIds] = useState(new Set());
+  const [userId, setUserId] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      fetchRoleAndClasses();
+      fetchData();
     });
 
-    const fetchRoleAndClasses = async () => {
+    const fetchData = async () => {
       try {
-        const manager = (await getClassesForManager()).data;
-        const user = (await getClassesForUser()).data;
-        
-        const filteredUser = user.filter(
-          (userClass) => !manager.some((managedClass) => managedClass._id === userClass._id)
+        setLoading(true);
+     
+        const currentUserId = await AsyncStorage.getItem('userId');
+        setUserId(currentUserId);
+
+       
+        const managerPromise = getClassesForManager();
+        const userPromise = getClassesForUser();
+        const publicPromise = getPublicClasses();
+
+        const [managerRes, userRes, publicRes] = await Promise.all([
+          managerPromise,
+          userPromise,
+          publicPromise,
+        ]);
+
+        const managerClasses = managerRes.data;
+        const userClasses = userRes.data;
+        const publicClassesData = publicRes.data;
+
+      
+        const managerIds = new Set(managerClasses.map(cls => cls._id));
+
+        const filteredUserClasses = userClasses.filter(
+          (userClass) => !managerIds.has(userClass._id)
         );
-        
-        setAllClasses([...manager, ...filteredUser]);
-        
-        setManagedClassIds(new Set(manager.map(cls => cls._id)));
+        const myClasses = [...managerClasses, ...filteredUserClasses];
+        setAllClasses(myClasses);
+        setManagedClassIds(managerIds);
+        const myClassIds = new Set(myClasses.map(cls => cls._id));
+        const discoverableClasses = publicClassesData.filter(
+          (publicClass) => !myClassIds.has(publicClass._id)
+        );
+        setPublicClasses(discoverableClasses);
 
       } catch (err) {
         console.error('❌ שגיאה בטעינת רשימות:', err.message);
@@ -44,10 +76,33 @@ export default function ClassScreen({ navigation, route }) {
       }
     };
 
-    fetchRoleAndClasses();
+    fetchData();
     
     return unsubscribe;
   }, [navigation]);
+
+ 
+  const handleJoinClass = async (classToJoin) => {
+    if (!userId) {
+      Alert.alert('שגיאה', 'לא ניתן לזהות משתמש');
+      return;
+    }
+    try {
+      await addUserToClass(classToJoin._id, userId);
+      Alert.alert('הצלחה', `הצטרפת לכיתה "${classToJoin.title}"!`);
+      setPublicClasses(prev => prev.filter(cls => cls._id !== classToJoin._id));
+      
+      setAllClasses(prev => [...prev, classToJoin]);
+
+    } catch (err) {
+      console.error('❌ שגיאה בהצטרפות לכיתה:', err.message);
+      Alert.alert('שגיאה', 'לא ניתן היה להצטרף לכיתה');
+    }
+  };
+
+
+
+  
   const renderClassItem = ({ item }) => {
     const isManager = managedClassIds.has(item._id);
 
@@ -62,7 +117,6 @@ export default function ClassScreen({ navigation, route }) {
             })
           }>
           <Text style={styles.cardText}>{item.title}</Text>
-          
           {item.description && ( 
             <Text style={styles.cardDescription}>{item.description}</Text>
           )}
@@ -85,17 +139,43 @@ export default function ClassScreen({ navigation, route }) {
     );
   };
   
+ 
+  const renderPublicClassItem = ({ item }) => {
+    return (
+      <View style={[styles.card, styles.publicCard]}>
+        <View style={{ flex: 1, paddingLeft: 10 }}>
+          <Text style={styles.cardText}>{item.title}</Text>
+          {item.description && ( 
+            <Text style={styles.cardDescription}>{item.description}</Text>
+          )}
+        </View>
+
+        <TouchableOpacity
+          style={styles.joinButton}
+          onPress={() => handleJoinClass(item)}
+        >
+          <Text style={styles.joinButtonText}>הצטרף</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
 
   if (loading) return <ActivityIndicator size="large" style={{ flex: 1, justifyContent: 'center' }} />;
   
+
   const filteredClasses = allClasses.filter((cls) =>
     cls.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
   
+  const filteredPublicClasses = publicClasses.filter((cls) =>
+    cls.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
+  
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>הכיתות שלי</Text>
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>הכיתות</Text>
       <TextInput
         style={styles.searchInput}
         placeholder="חיפוש כיתה..."
@@ -110,18 +190,31 @@ export default function ClassScreen({ navigation, route }) {
         <Text style={styles.createButtonText}>➕ יצירת כיתה חדשה</Text>
       </TouchableOpacity>
 
+    
+      <Text style={styles.sectionTitle}>הכיתות שלי</Text>
       <FlatList
         data={filteredClasses}
         keyExtractor={(item) => item._id}
         renderItem={renderClassItem}
-        ListEmptyComponent={<Text style={styles.emptyListText}>לא נמצאו כיתות</Text>}
+        ListEmptyComponent={<Text style={styles.emptyListText}>עדיין לא הצטרפת לאף כיתה</Text>}
+        scrollEnabled={false} 
+      />
+
+
+      <Text style={styles.sectionTitle}>גלה כיתות חדשות</Text>
+      <FlatList
+        data={filteredPublicClasses}
+        keyExtractor={(item) => item._id}
+        renderItem={renderPublicClassItem}
+        ListEmptyComponent={<Text style={styles.emptyListText}>לא נמצאו כיתות ציבוריות חדשות</Text>}
+        scrollEnabled={false}
         style={{ marginTop: 16 }}
       />
-    </View>
+    </ScrollView>
   );
 }
 
-// ⬇️ --- הוספנו סטייל חדש --- ⬇️
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -136,12 +229,15 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 22, 
     fontWeight: '600',
     color: '#555',
     marginBottom: 12,
-    marginTop: 16,
+    marginTop: 20, 
     textAlign: 'right',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    paddingBottom: 4,
   },
   searchInput: {
     backgroundColor: '#ffffff',
@@ -190,18 +286,22 @@ const styles = StyleSheet.create({
     borderRightWidth: 4,
     borderRightColor: '#6c757d',
   },
+  publicCard: {
+    borderRightWidth: 4,
+    borderRightColor: '#28a745', 
+    justifyContent: 'space-between', 
+  },
   cardText: {
     fontSize: 18,
     fontWeight: '500',
     color: '#333',
     textAlign: 'right',
   },
-  // הסטייל החדש לתיאור
   cardDescription: {
     fontSize: 14,
-    color: '#6c757d', // צבע אפור
+    color: '#6c757d',
     textAlign: 'right',
-    marginTop: 4, // רווח קטן מהכותרת
+    marginTop: 4,
   },
   actionButtons: {
     flexDirection: 'row',
@@ -215,6 +315,17 @@ const styles = StyleSheet.create({
   },
   iconText: {
     fontSize: 18,
+  },
+  joinButton: {
+    backgroundColor: '#28a745',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+  },
+  joinButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   emptyListText: {
     textAlign: 'center',

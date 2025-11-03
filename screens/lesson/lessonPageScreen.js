@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getAllFiles, getTasks, updateTask, markTaskCompleted } from '../../utils/api';
 import YoutubeIframe from 'react-native-youtube-iframe';
 import Pdf from 'react-native-pdf';
-import { Audio } from 'expo-av'; // 1. ייבוא חדש
+import { Audio } from 'expo-audio';
 
 const getFileIcon = (fileType) => {
   switch (fileType) {
