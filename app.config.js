@@ -1,11 +1,9 @@
 export default {
   expo: {
-  plugins: [
-      "expo-audio",
-      "expo-video",
+    plugins: [
       "react-native-track-player"
     ],
-    name: "TaskMate",
+    name: "private lessons",
     slug: "taskmate",
     version: "1.0.0",
     android: { 
@@ -16,7 +14,7 @@ export default {
       package: "com.masore.privateLessons" 
     },
     ios: {
-      bundleIdentifier: "com.masore.privateLessons" ,
+      bundleIdentifier: "com.masore.privateLessons",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false 
       }

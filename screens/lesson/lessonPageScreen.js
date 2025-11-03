@@ -229,8 +229,19 @@ export default function LessonPageScreen({ navigation, route }) {
             );
         }
         else {
-            // ... (קוד רנדור לקבצים אחרים נשאר זהה) ...
-            return ( /* ... (כמו קודם) ... */ );
+            return (
+                <View style={styles.fileContainer}>
+                    <TouchableOpacity style={styles.fileHeader} onPress={() => handleOpenFile(file.fileUrl)}>
+                        <Text style={styles.fileIcon}>{getFileIcon(file.fileType)}</Text>
+                        <View style={styles.fileInfo}>
+                            <Text style={styles.fileName}>{file.fileName}</Text>
+                            {file.description && <Text style={styles.fileDescription}>{file.description}</Text>}
+                        </View>
+                        <Text style={styles.fileLinkIcon}>🔗</Text>
+                    </TouchableOpacity>
+                    {renderTasks('משימות לקובץ:')}
+                </View>
+            );
         }
     };
 
@@ -242,10 +253,16 @@ export default function LessonPageScreen({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            {/* ... (קוד ה-JSX הראשי נשאר זהה) ... */}
             <Text style={styles.title}>{lesson.title}</Text>
             <Text style={styles.subtitle}>שיעור ב: {classParams.title}</Text>
-            {isManager && ( /* ... (כמו קודם) ... */ )}
+            {isManager && (
+              <TouchableOpacity
+                style={styles.adminButton}
+                onPress={() => navigation.navigate('AdminLesson', { lesson: lesson ,classParams: classParams})}
+              >
+                <Text style={styles.adminButtonText}>⚙️ ניהול שיעור</Text>
+              </TouchableOpacity>
+            )}
             <FlatList
                 data={filteredFilesToShow}
                 keyExtractor={(item) => item.file._id}
