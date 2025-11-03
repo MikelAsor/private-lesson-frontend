@@ -1,7 +1,7 @@
 export default {
   expo: {
     plugins: [
-      "react-native-track-player"
+      "expo-audio"
     ],
     name: "private lessons",
     slug: "taskmate",
