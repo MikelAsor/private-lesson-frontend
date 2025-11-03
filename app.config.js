@@ -1,9 +1,10 @@
 export default {
   expo: {
-  "plugins": [
-    "expo-audio",
-    "expo-video"
-  ],
+  plugins: [
+      "expo-audio",
+      "expo-video",
+      "react-native-track-player"
+    ],
     name: "TaskMate",
     slug: "taskmate",
     version: "1.0.0",
